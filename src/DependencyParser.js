@@ -49,6 +49,7 @@ var dependencyParser = {
 		var objectsRegex = new RegExp(
 			parseModule + parseType + parseName + parseDependencies, 'g'
 		);
+		var splitDepRegEx = new RegExp(/\s*,\s*/);
 		var matches;
 		var parsedObjects = [];
 		while ((matches = objectsRegex.exec(code)) !== null)
