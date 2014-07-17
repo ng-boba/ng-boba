@@ -2,6 +2,7 @@
 var fs = require('fs');
 var angular = require('angular');
 var inject = angular.injector(['ng']).invoke;
+var NGObjectDetails = require('./NGObjectDetails');
 
 // is there a better way to get $q?
 var $q;
@@ -38,19 +39,25 @@ var dependencyParser = {
 	 * @returns {NGObjectDetails[]}
 	 */
 	parseCode: function(code) {
-		var myRe = new RegExp(/module\(['|"]([^)]+)['|"]\)/g);
-		var str = code;
-		var myArray;
-		var matches = [];
-		while ((myArray = myRe.exec(str)) !== null)
+		var myRe = new RegExp(
+			/module\(['|"]([^)]+)['|"]\)\.(factory|service|controller)\(['|"]([^'"]+)['|"],\s*function\(([^)]*)\)/g
+		);
+		var matches;
+		var parsedObjects = [];
+		while ((matches = myRe.exec(code)) !== null)
 		{
-			var NGObjectDetails = {};
-			NGObjectDetails.module = myArray[1]
-			matches.push(NGObjectDetails)
+			// console.log(matches);
+			var deps = matches[4].split(', ');
+			var o = new NGObjectDetails(
+				matches[1],
+				matches[2],
+				matches[3],
+				deps
+			);
+			console.log(o)
+			parsedObjects.push(o);
 		}
-
-		console.log(matches)
-		return matches
+		return parsedObjects;
 	}
 };
 
