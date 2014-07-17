@@ -38,13 +38,19 @@ var dependencyParser = {
 	 * @returns {NGObjectDetails[]}
 	 */
 	parseCode: function(code) {
+		var myRe = new RegExp(/module\(['|"]([^)]+)['|"]\)/g);
+		var str = code;
+		var myArray;
+		var matches = [];
+		while ((myArray = myRe.exec(str)) !== null)
+		{
+			var NGObjectDetails = {};
+			NGObjectDetails.module = myArray[1]
+			matches.push(NGObjectDetails)
+		}
 
-		// TODO: perform some horrible regexes to pull out the dependency details
-		var details = [];
-		details.push({
-			hi: 'there'
-		});
-		return details;
+		console.log(matches)
+		return matches
 	}
 };
 
