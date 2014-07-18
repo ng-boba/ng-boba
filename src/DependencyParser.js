@@ -10,6 +10,44 @@ inject(function (_$q_) {
 	$q = _$q_;
 });
 
+function parseStringDependencies(s) {
+
+		// now let's parse the module dependency strings
+		var depRegex = /['|"]([^'"]+)['|"]/g;
+		var matches;
+		var parsed = [];
+		while ((matches = depRegex.exec(s)) !== null)
+		{
+			parsed.push(matches[1]);
+		}
+		return parsed;
+}
+
+
+function parseModuleCode(code) {
+	var regEx = new RegExp('module\\([\'|"]([^)\'"]+)[\'|"],', 'g');
+
+	var parseModule = 'module\\([\'|"]([^)\'"]+)[\'|"],\\s*';
+	var parseDependencies = '\\[([^)]*)\\]';
+	var objectsRegex = new RegExp(
+		 parseModule + parseDependencies, 'g'
+	);
+
+	var parsedObjects = [];
+	var matches;
+	while ((matches = objectsRegex.exec(code)) !== null)
+	{
+		var o = new NGObjectDetails(
+			matches[1],
+			'module',
+			null,
+			parseStringDependencies(matches[2])
+		);
+		parsedObjects.push(o);
+	}
+	return parsedObjects;
+};
+
 var dependencyParser = {
 
 	/**
@@ -39,11 +77,8 @@ var dependencyParser = {
 	 * @returns {NGObjectDetails[]}
 	 */
 	parseCode: function(code) {
-
-		// TODO: include module parsing
-		// parse out component declarations
 		var parseModule = 'module\\([\'|"]([^)]+)[\'|"]\\)',
-			parseType = '\\.(factory|service|controller)\\(',
+			parseType = '\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
 			parseName = '[\'|"]([^\'"]+)[\'|"]',
 			parseDependencies = ',\\s*function\\(([^)]*)\\)';
 		var objectsRegex = new RegExp(
@@ -51,11 +86,9 @@ var dependencyParser = {
 		);
 		var splitDepRegEx = new RegExp(/\s*,\s*/);
 		var matches;
-		var parsedObjects = [];
+		var parsedObjects = parseModuleCode(code);
 		while ((matches = objectsRegex.exec(code)) !== null)
 		{
-//			console.log(matches);
-
 			var deps = matches[4].split(splitDepRegEx);
 			var o = new NGObjectDetails(
 				matches[1],
@@ -63,9 +96,9 @@ var dependencyParser = {
 				matches[3],
 				deps
 			);
-			console.log(o)
 			parsedObjects.push(o);
 		}
+		console.log(parsedObjects);
 		return parsedObjects;
 	}
 };
