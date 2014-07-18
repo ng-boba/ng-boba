@@ -56,7 +56,7 @@ var dependencyParser = {
 		{
 //			console.log(matches);
 
-			var deps = matches[4].split(', ');
+			var deps = matches[4].split(splitDepRegEx);
 			var o = new NGObjectDetails(
 				matches[1],
 				matches[2],
