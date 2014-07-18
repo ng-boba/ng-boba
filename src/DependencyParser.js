@@ -39,14 +39,22 @@ var dependencyParser = {
 	 * @returns {NGObjectDetails[]}
 	 */
 	parseCode: function(code) {
-		var myRe = new RegExp(
-			/module\(['|"]([^)]+)['|"]\)\.(factory|service|controller)\(['|"]([^'"]+)['|"],\s*function\(([^)]*)\)/g
+
+		// TODO: include module parsing
+		// parse out component declarations
+		var parseModule = 'module\\([\'|"]([^)]+)[\'|"]\\)',
+			parseType = '\\.(factory|service|controller)\\(',
+			parseName = '[\'|"]([^\'"]+)[\'|"]',
+			parseDependencies = ',\\s*function\\(([^)]*)\\)';
+		var objectsRegex = new RegExp(
+			parseModule + parseType + parseName + parseDependencies, 'g'
 		);
 		var matches;
 		var parsedObjects = [];
-		while ((matches = myRe.exec(code)) !== null)
+		while ((matches = objectsRegex.exec(code)) !== null)
 		{
-			// console.log(matches);
+//			console.log(matches);
+
 			var deps = matches[4].split(', ');
 			var o = new NGObjectDetails(
 				matches[1],
