@@ -3,20 +3,29 @@ var fs = require('fs');
 var $q = require('q');
 var NGObjectDetails = require('./NGObjectDetails');
 
+/**
+ * @private
+ * @param s
+ * @returns {Array}
+ */
 function parseStringDependencies(s) {
 
-		// now let's parse the module dependency strings
-		var depRegex = /['|"]([^'"]+)['|"]/g;
-		var matches;
-		var parsed = [];
-		while ((matches = depRegex.exec(s)) !== null)
-		{
-			parsed.push(matches[1]);
-		}
-		return parsed;
+	// now let's parse the module dependency strings
+	var depRegex = /['|"]([^'"]+)['|"]/g;
+	var matches;
+	var parsed = [];
+	while ((matches = depRegex.exec(s)) !== null)
+	{
+		parsed.push(matches[1]);
+	}
+	return parsed;
 }
 
-
+/**
+ * @private
+ * @param code
+ * @returns {Array}
+ */
 function parseModuleCode(code) {
 	var regEx = new RegExp('module\\([\'|"]([^)\'"]+)[\'|"],', 'g');
 
@@ -31,9 +40,9 @@ function parseModuleCode(code) {
 	while ((matches = objectsRegex.exec(code)) !== null)
 	{
 		var o = new NGObjectDetails(
-			matches[1],
+			null, // modules are null
 			'module',
-			null,
+			matches[1],
 			parseStringDependencies(matches[2])
 		);
 		parsedObjects.push(o);
@@ -53,7 +62,8 @@ var dependencyParser = {
 
 		fs.readFile(path, 'utf8', function (err, data) {
 			if (err) {
-				return console.log(err);
+				deferred.reject();
+				return;
 			}
 
 			// now that we have the codes

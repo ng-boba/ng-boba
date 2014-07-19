@@ -2,7 +2,7 @@
 var INGObjectDetails = {
 
 	/**
-	 * @enum {decorator, constant, value, filter, directive, provider, service, factory, controller, animation, config, run}
+	 * @enum {module, decorator, constant, value, filter, directive, provider, service, factory, controller, animation, config, run}
 	 */
 	"type": '',
 
