@@ -6,16 +6,24 @@ var NGObjectDetails = require('./NGObjectDetails');
 /**
  * @private
  * @param s
+ * @param {Boolean} asString - if the dependencies are specified in strings...
  * @returns {Array}
  */
-function parseStringDependencies(s) {
+function parseDependencies(s, asString) {
+	if (!s) {
+		return [];
+	}
 
-	// now let's parse the module dependency strings
-	var depRegex = /['|"]([^'"]+)['|"]/g;
+	// now let's parse the module dependencies
+	var depRegex;
+	if (asString) {
+		depRegex = /\s*['|"]([^'"]+)['|"]\s*/g;
+	} else {
+		depRegex = /\s*([^,]+)\s*/g;
+	}
 	var matches;
 	var parsed = [];
-	while ((matches = depRegex.exec(s)) !== null)
-	{
+	while ((matches = depRegex.exec(s)) !== null) {
 		parsed.push(matches[1]);
 	}
 	return parsed;
@@ -29,21 +37,20 @@ function parseStringDependencies(s) {
 function parseModuleCode(code) {
 	var regEx = new RegExp('module\\([\'|"]([^)\'"]+)[\'|"],', 'g');
 
-	var parseModule = 'module\\([\'|"]([^)\'"]+)[\'|"],\\s*';
-	var parseDependencies = '\\[([^)]*)\\]';
+	var parseModuleRegex = 'module\\([\'|"]([^)\'"]+)[\'|"],\\s*';
+	var parseDependenciesRegex = '\\[([^)]*)\\]';
 	var objectsRegex = new RegExp(
-		 parseModule + parseDependencies, 'g'
+		 parseModuleRegex + parseDependenciesRegex, 'g'
 	);
 
 	var parsedObjects = [];
 	var matches;
-	while ((matches = objectsRegex.exec(code)) !== null)
-	{
+	while ((matches = objectsRegex.exec(code)) !== null) {
 		var o = new NGObjectDetails(
 			null, // modules are null
 			'module',
 			matches[1],
-			parseStringDependencies(matches[2])
+			parseDependencies(matches[2], true)
 		);
 		parsedObjects.push(o);
 	}
@@ -80,27 +87,21 @@ var dependencyParser = {
 	 * @returns {NGObjectDetails[]}
 	 */
 	parseCode: function(code) {
-		var parseModule = 'module\\([\'|"]([^)]+)[\'|"]\\)',
-			parseType = '\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
-			parseName = '[\'|"]([^\'"]+)[\'|"]',
-			parseDependencies = ',\\s*function\\(([^)]*)\\)';
+		var parseModuleRegex = 'module\\([\'|"]([^)]+)[\'|"]\\)',
+			parseTypeRegex = '\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
+			parseNameRegex = '[\'|"]([^\'"]+)[\'|"]',
+			parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
 		var objectsRegex = new RegExp(
-			parseModule + parseType + parseName + parseDependencies, 'g'
+			parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
 		);
-		var splitDepRegEx = new RegExp(/\s*,\s*/);
 		var matches;
 		var parsedObjects = parseModuleCode(code);
-		while ((matches = objectsRegex.exec(code)) !== null)
-		{
-			var deps = [];
-			if (matches[4]) {
-				deps = matches[4].split(splitDepRegEx);
-			}
+		while ((matches = objectsRegex.exec(code)) !== null) {
 			var o = new NGObjectDetails(
 				matches[1],
 				matches[2],
 				matches[3],
-				deps
+				parseDependencies(matches[4])
 			);
 			parsedObjects.push(o);
 		}
