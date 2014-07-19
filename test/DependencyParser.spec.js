@@ -157,7 +157,8 @@ describe('DependencyParser', function() {
 
 	it('parses definitions with whitespace', function() {
 		parseTestCase('whitespace', function(parsedObjects) {
-			expect(parsedObjects.length).toEqual(2);
+			expect(parsedObjects.length).toEqual(4);
+
 			var o = parsedObjects[0];
 			expect(o.module).toEqual('test1');
 			expect(o.type).toEqual('controller');
@@ -170,6 +171,17 @@ describe('DependencyParser', function() {
 			expect(o.name).toEqual('TestController');
 			validateDependencies(o, 0);
 
+			o = parsedObjects[2];
+			expect(o.module).toEqual('test3');
+			expect(o.type).toEqual('controller');
+			expect(o.name).toEqual('TestController');
+			validateDependencies(o, 0);
+
+			o = parsedObjects[3];
+			expect(o.module).toEqual('test4');
+			expect(o.type).toEqual('controller');
+			expect(o.name).toEqual('TestController');
+			validateDependencies(o, 4);
 		});
 	});
 

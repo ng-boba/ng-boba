@@ -19,7 +19,7 @@ function parseDependencies(s, asString) {
 	if (asString) {
 		depRegex = /\s*['|"]([^'"]+)['|"]\s*/g;
 	} else {
-		depRegex = /\s*([^,]+)\s*/g;
+		depRegex = /\s*([^,\s]+)\s*/g;
 	}
 	var matches;
 	var parsed = [];
@@ -87,9 +87,9 @@ var dependencyParser = {
 	 * @returns {NGObjectDetails[]}
 	 */
 	parseCode: function(code) {
-		var parseModuleRegex = 'module\\([\'|"]([^)]+)[\'|"]\\)',
-			parseTypeRegex = '\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
-			parseNameRegex = '[\'|"]([^\'"]+)[\'|"]',
+		var parseModuleRegex = '\\s*module\\([\'|"]([^)]+)[\'|"]\\)',
+			parseTypeRegex = '\\s*\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
+			parseNameRegex = '\\s*[\'|"]([^\'"]+)[\'|"]',
 			parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
 		var objectsRegex = new RegExp(
 			parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
