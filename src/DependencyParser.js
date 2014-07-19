@@ -1,14 +1,7 @@
 
 var fs = require('fs');
-var angular = require('angular');
-var inject = angular.injector(['ng']).invoke;
+var $q = require('q');
 var NGObjectDetails = require('./NGObjectDetails');
-
-// is there a better way to get $q?
-var $q;
-inject(function (_$q_) {
-	$q = _$q_;
-});
 
 function parseStringDependencies(s) {
 
@@ -98,7 +91,7 @@ var dependencyParser = {
 			);
 			parsedObjects.push(o);
 		}
-		console.log(parsedObjects);
+//		console.log(parsedObjects);
 		return parsedObjects;
 	}
 };
