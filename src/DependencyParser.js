@@ -92,7 +92,10 @@ var dependencyParser = {
 		var parsedObjects = parseModuleCode(code);
 		while ((matches = objectsRegex.exec(code)) !== null)
 		{
-			var deps = matches[4].split(splitDepRegEx);
+			var deps = [];
+			if (matches[4]) {
+				deps = matches[4].split(splitDepRegEx);
+			}
 			var o = new NGObjectDetails(
 				matches[1],
 				matches[2],
@@ -101,7 +104,6 @@ var dependencyParser = {
 			);
 			parsedObjects.push(o);
 		}
-//		console.log(parsedObjects);
 		return parsedObjects;
 	}
 };

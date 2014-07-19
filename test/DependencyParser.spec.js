@@ -37,8 +37,10 @@ describe('DependencyParser', function() {
 		var dependencies = o.dependencies;
 		if (typeof expectedLength !== 'undefined') {
 			expect(dependencies.length).toEqual(expectedLength);
+		} else {
+			expectedLength = dependencies.length;
 		}
-		for (var i = 0; i < dependencies.length; i++) {
+		for (var i = 0; i < expectedLength; i++) {
 			expect(dependencies[i]).toEqual('dep' + (i+1));
 		}
 	}
@@ -55,17 +57,33 @@ describe('DependencyParser', function() {
 
 	it('parses module definition', function() {
 		parseTestCase('module', function(parsedObjects) {
-			expect(parsedObjects.length).toEqual(2);
+			expect(parsedObjects.length).toEqual(1);
 			var o = parsedObjects[0];
 			expect(o.module).toBeNull();
 			expect(o.type).toEqual('module');
-			expect(o.name).toEqual('withDeps');
+			expect(o.name).toEqual('test');
 			validateDependencies(o, 2);
+		});
+	});
 
-			o = parsedObjects[1];
+	it('parses module definition without dependencies', function() {
+		parseTestCase('module-nodependencies', function(parsedObjects) {
+			expect(parsedObjects.length).toEqual(1);
+			var o = parsedObjects[0];
 			expect(o.module).toBeNull();
 			expect(o.type).toEqual('module');
-			expect(o.name).toEqual('withoutDeps');
+			expect(o.name).toEqual('test');
+			validateDependencies(o, 0);
+		});
+	});
+
+	it('parses factory without dependencies', function() {
+		parseTestCase('factory-nodependencies', function(parsedObjects) {
+			expect(parsedObjects.length).toEqual(1);
+			var o = parsedObjects[0];
+			expect(o.module).toEqual('test');
+			expect(o.type).toEqual('factory');
+			expect(o.name).toEqual('testFactory');
 			validateDependencies(o, 0);
 		});
 	});
@@ -134,6 +152,24 @@ describe('DependencyParser', function() {
 			expect(o.type).toEqual('factory');
 			expect(o.name).toEqual('testFactory2');
 			validateDependencies(o, 3);
+		});
+	});
+
+	it('parses definitions with whitespace', function() {
+		parseTestCase('whitespace', function(parsedObjects) {
+			expect(parsedObjects.length).toEqual(2);
+			var o = parsedObjects[0];
+			expect(o.module).toEqual('test1');
+			expect(o.type).toEqual('controller');
+			expect(o.name).toEqual('TestController');
+			validateDependencies(o, 0);
+
+			o = parsedObjects[1];
+			expect(o.module).toEqual('test2');
+			expect(o.type).toEqual('controller');
+			expect(o.name).toEqual('TestController');
+			validateDependencies(o, 0);
+
 		});
 	});
 
