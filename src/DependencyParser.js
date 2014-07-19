@@ -61,14 +61,15 @@ var dependencyParser = {
 
 	/**
 	 * Extracts information about the angular objects within a file.
-	 * @param path
-	 * @returns {NGObjectDetails[]}
+	 * @param {String} path
+	 * @returns {q.promise} NGObjectDetails[]
 	 */
 	parseFile: function(path) {
 		var deferred = $q.defer();
 
 		fs.readFile(path, 'utf8', function (err, data) {
 			if (err) {
+				// console.log(err);
 				deferred.reject();
 				return;
 			}
@@ -78,6 +79,31 @@ var dependencyParser = {
 			deferred.resolve(details);
 		});
 
+		return deferred.promise;
+	},
+
+	/**
+	 * Extracts information about the angular objects within a folder.
+	 * @param {String} path
+	 * @returns {Array}
+	 */
+	parseFolder: function(path) {
+		var deferred = $q.defer();
+		var filePath = path;
+
+		fs.readdir(path, function (err, files) {
+			if (err) {
+				return console.log(err);
+			}
+			for (var i = 0; i < files.length; i++) {
+				var fullFilePath = filePath + '/' + files[i];
+				console.log(fullFilePath);
+				var result = dependencyParser.parseFile(filePath + '/' + files[i]);
+				result.then(function(response) {
+					console.log(response);
+				});
+	    	}
+		});
 		return deferred.promise;
 	},
 
