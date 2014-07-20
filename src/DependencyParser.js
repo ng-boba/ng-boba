@@ -61,13 +61,14 @@ var dependencyParser = {
 
 	/**
 	 * Extracts information about the angular objects within a file.
-	 * @param {String} path
-	 * @returns {q.promise} NGObjectDetails[]
+	 * @param {String} filePath
+	 * @returns {q.promise} fileObject
 	 */
-	parseFile: function(path) {
+	parseFile: function(filePath) {
 		var deferred = $q.defer();
+		var filePath = filePath;
 
-		fs.readFile(path, 'utf8', function (err, data) {
+		fs.readFile(filePath, 'utf8', function (err, data) {
 			if (err) {
 				// console.log(err);
 				deferred.reject();
@@ -75,34 +76,45 @@ var dependencyParser = {
 			}
 
 			// now that we have the codes
-			var details = dependencyParser.parseCode(data);
-			deferred.resolve(details);
+			var ngObject = dependencyParser.parseCode(data);
+			var fileObject = {
+				filePath: filePath,
+				results: ngObject
+			}
+			deferred.resolve(fileObject);
 		});
 
 		return deferred.promise;
 	},
 
 	/**
-	 * Extracts information about the angular objects within a folder.
-	 * @param {String} path
-	 * @returns {Array}
+	 * Parses all files in a directory and returns angular object information.
+	 * @param {String} directoryPath
+	 * @returns {q.promise} fileObjects[]
 	 */
-	parseFolder: function(path) {
+	parseFolder: function(directoryPath) {
 		var deferred = $q.defer();
-		var filePath = path;
+		var directoryPath = directoryPath;
+		var fileObjects = [];
 
-		fs.readdir(path, function (err, files) {
+		fs.readdir(directoryPath, function (err, files) {
 			if (err) {
 				return console.log(err);
 			}
+			var nodes = [];
+			var qs = [];
 			for (var i = 0; i < files.length; i++) {
-				var fullFilePath = filePath + '/' + files[i];
-				console.log(fullFilePath);
-				var result = dependencyParser.parseFile(filePath + '/' + files[i]);
-				result.then(function(response) {
-					console.log(response);
+				var fullFilePath = directoryPath + '/' + files[i];
+				var result = dependencyParser.parseFile(fullFilePath);
+				result.then(function(fileObject) {
+					fileObjects.push(fileObject);
 				});
+				qs.push(result);
 	    	}
+	    	$q.all(qs).then(function() {
+				deferred.resolve(fileObjects);
+	    	});
+	    	
 		});
 		return deferred.promise;
 	},

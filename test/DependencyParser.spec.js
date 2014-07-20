@@ -17,8 +17,8 @@ describe('DependencyParser', function() {
 		var path = 'test/cases/'+ name +'.js';
 		var $promise = DependencyParser.parseFile(path);
 		var parsedObjects;
-		$promise.then(function(_parsedObjects) {
-			parsedObjects = _parsedObjects;
+		$promise.then(function(fileObject) {
+			parsedObjects = fileObject.results;
 		});
 		waitsFor(function() {
 			return !$promise.isPending();
