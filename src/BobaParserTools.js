@@ -21,8 +21,7 @@ function parseFile(filePath) {
 
 	fs.readFile(filePath, 'utf8', function (err, data) {
 		if (err) {
-			// console.log(err);
-			deferred.reject();
+			deferred.reject(err);
 			return;
 		}
 
@@ -45,27 +44,37 @@ function parseFile(filePath) {
  */
 function parseFolder(directoryPath) {
 	var deferred = $q.defer();
-	var directoryPath = directoryPath;
+	var directoryPath = directoryPath.substr(-1) == '/' ? directoryPath : directoryPath + '/';
 	var fileObjects = [];
-
 	fs.readdir(directoryPath, function (err, files) {
 		if (err) {
-			return console.log(err);
+			deferred.reject(err);
+			return;
 		}
-		var nodes = [];
-		var qs = [];
-		for (var i = 0; i < files.length; i++) {
-			var fullFilePath = directoryPath + '/' + files[i];
-			var result = parseFile(fullFilePath);
-			result.then(function(fileObject) {
-				fileObjects.push(fileObject);
-			});
-			qs.push(result);
-		}
-		$q.all(qs).then(function() {
-			deferred.resolve(fileObjects);
-		});
+		var results = [];
+		for (var i = 0, iM = files.length; i < iM; i++) {
 
+			// TODO: use glob instead to parse directories
+			var filePath = directoryPath + files[i];
+			fs.stat(filePath, function(err, stat) {
+				if (stat && stat.isDirectory()) {
+
+					// NOOP
+				} else {
+					var $promise = parseFile(filePath);
+					$promise.then(function(fileObject) {
+						fileObjects.push(fileObject);
+					});
+					results.push($promise);
+				}
+			});
+		}
+		$q.all(results).then(function() {
+			deferred.resolve(fileObjects);
+		}).catch(function() {
+			console.log('FAILED', arguments);
+			deferred.reject();
+		});
 	});
 	return deferred.promise;
 }
