@@ -1,3 +1,5 @@
+var JNode = require('./JNode');
+
 var jNodeLoop = function(dependencies) {
 	//The order the files need to be loaded
 	var fileOrder = [];
@@ -39,7 +41,9 @@ var jNodeLoop = function(dependencies) {
 				}	
 			}
 		}
-		// console.log(depsNeeded);
+		if (depsNeeded.length > 0) {
+			getModules(depsNeeded);
+		}
 	}
 
 	for (var i = 0; i < jNodes.length; i++) {
