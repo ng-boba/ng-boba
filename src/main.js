@@ -1,9 +1,7 @@
 
 var argv = require('minimist')(process.argv.slice(2));
 
-console.log('Welcome to ng-boba');
-console.log('-------------------------------');
-console.log('Main arguments: ', argv);
+console.log('\nng-boba\n');
 
 /**
  * @option modules - comma separated list of modules to bundle together
@@ -22,21 +20,20 @@ modules = modules.split(',');
 var BobaParserTools = require('./BobaParserTools');
 var GDependencyGraph = require('./GDependencyGraph');
 
-var filePath = "test/cases/";
+var filePath = "test/project/";
 var result = BobaParserTools.parseFolder(filePath);
-// var result = BobaParserTools.parseFile('test/cases/module-definition-with-controller.js');
 
 result.then(function(dependencies) {
-	console.log('found deps', dependencies);
+	console.log('Dependencies:\n', dependencies);
 
 	// create a list of files
 	var g = new GDependencyGraph(dependencies);
 	var files = g.getBundleFiles(modules[0]);
 
-	console.log('');
-	console.log('ggggggggggggggggggggggggggggggggggg');
-	console.log('');
-	console.log('Generated bundle files:', files);
-}).done(function() {
-	console.log(arguments);
+	console.log('\nGDependencyGraph, bundle files:\n', files, '\n');
+
+}).done(function(err) {
+	if (err) {
+		console.log(arguments);
+	}
 });
