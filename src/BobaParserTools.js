@@ -18,22 +18,45 @@ module.exports = {
 function parseFile(filePath) {
 	var deferred = $q.defer();
 	var filePath = filePath;
+	isFile(filePath).then(function() {
+		fs.readFile(filePath, 'utf8', function (err, data) {
+			if (err) {
+				deferred.reject(err);
+				return;
+			}
 
-	fs.readFile(filePath, 'utf8', function (err, data) {
-		if (err) {
-			deferred.reject(err);
+			// now that we have the codes
+			var ngObject = NGDependencyParser.parseCode(data);
+			var fileObject = {
+				filePath: filePath,
+				results: ngObject
+			};
+			deferred.resolve(fileObject);
+		});
+	}).catch(function() {
+		deferred.reject();
+	});
+	return deferred.promise;
+}
+
+/**
+ * Is it a file?
+ * @param filePath
+ * @returns {q.promise}
+ */
+function isFile(filePath) {
+	var deferred = $q.defer();
+	fs.stat(filePath, function(err, stat) {
+		if (err || !stat) {
+			deferred.reject();
 			return;
 		}
-
-		// now that we have the codes
-		var ngObject = NGDependencyParser.parseCode(data);
-		var fileObject = {
-			filePath: filePath,
-			results: ngObject
+		if (stat.isDirectory()) {
+			deferred.reject();
+		} else {
+			deferred.resolve();
 		}
-		deferred.resolve(fileObject);
 	});
-
 	return deferred.promise;
 }
 
@@ -53,27 +76,16 @@ function parseFolder(directoryPath) {
 		}
 		var results = [];
 		for (var i = 0, iM = files.length; i < iM; i++) {
-
-			// TODO: use glob instead to parse directories
 			var filePath = directoryPath + files[i];
-			fs.stat(filePath, function(err, stat) {
-				if (stat && stat.isDirectory()) {
-
-					// NOOP
-				} else {
-					var $promise = parseFile(filePath);
-					$promise.then(function(fileObject) {
-						fileObjects.push(fileObject);
-					});
-					results.push($promise);
+			var result = parseFile(filePath).then(function(fileObject) {
+				if (fileObject) {
+					fileObjects.push(fileObject);
 				}
 			});
+			results.push(result);
 		}
-		$q.all(results).then(function() {
+		$q.allSettled(results).finally(function() {
 			deferred.resolve(fileObjects);
-		}).catch(function() {
-			console.log('FAILED', arguments);
-			deferred.reject();
 		});
 	});
 	return deferred.promise;
