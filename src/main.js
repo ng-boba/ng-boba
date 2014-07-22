@@ -21,7 +21,7 @@ var BobaParserTools = require('./BobaParserTools');
 var GDependencyGraph = require('./GDependencyGraph');
 var jNodeLoop = require('./jNodeLoop');
 
-var filePath = "test/cases/";
+var filePath = "test/project/";
 var result = BobaParserTools.parseFolder(filePath);
 
 result.then(function(dependencies) {
