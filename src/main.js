@@ -11,7 +11,7 @@ console.log('Main arguments: ', argv);
  */
 var modules = argv.modules;
 if (!modules) {
-	throw 'Must specify at least one module!';
+	throw 'Must specify at least one module! Example: node main.js --modules=foo';
 }
 modules = modules.split(',');
 
