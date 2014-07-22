@@ -3,7 +3,7 @@
  */
 var fs = require('fs');
 var $q = require('q');
-var NGDepedencyParser = require('./NGDependencyParser');
+var NGDependencyParser = require('./NGDependencyParser');
 
 module.exports = {
 	parseFile: parseFile,
@@ -27,7 +27,7 @@ function parseFile(filePath) {
 		}
 
 		// now that we have the codes
-		var ngObject = NGDepedencyParser.parseCode(data);
+		var ngObject = NGDependencyParser.parseCode(data);
 		var fileObject = {
 			filePath: filePath,
 			results: ngObject
@@ -56,7 +56,7 @@ function parseFolder(directoryPath) {
 		var qs = [];
 		for (var i = 0; i < files.length; i++) {
 			var fullFilePath = directoryPath + '/' + files[i];
-			var result = NGDepedencyParser.parseFile(fullFilePath);
+			var result = NGDependencyParser.parseFile(fullFilePath);
 			result.then(function(fileObject) {
 				fileObjects.push(fileObject);
 			});
