@@ -1,14 +1,3 @@
-
-var angular = require('angular');
-var DependencyParser = require('./DependencyParser');
-var JNode = require('./JNode');
-
-
-
-var filePath = "test/project";
-var result = DependencyParser.parseFolder(filePath);
-// var result = DependencyParser.parseFile('test/cases/module-definition-with-controller.js');
-
 var jNodeLoop = function(dependencies) {
 	//The order the files need to be loaded
 	var fileOrder = [];
@@ -50,9 +39,7 @@ var jNodeLoop = function(dependencies) {
 				}	
 			}
 		}
-		if (depsNeeded.length > 0) {
-			getModules(depsNeeded);
-		}
+		// console.log(depsNeeded);
 	}
 
 	for (var i = 0; i < jNodes.length; i++) {
@@ -72,7 +59,4 @@ var jNodeLoop = function(dependencies) {
 	console.log(fileOrder);
 }
 
-result.then(function(dependencies) {
-	jNodeLoop(dependencies);
-	
-});
+module.exports = jNodeLoop;
