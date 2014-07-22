@@ -1,6 +1,6 @@
 
 var angular = require('angular');
-var DependencyParser = require('./DependencyParser');
+var DependencyParser = require('./NGDependencyParser');
 
 
 
