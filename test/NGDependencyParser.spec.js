@@ -1,7 +1,8 @@
 
-var DependencyParser = require('../src/DependencyParser');
+var DependencyParser = require('../src/NGDependencyParser');
+var BobaParserTools = require('../src/BobaParserTools');
 
-describe('DependencyParser', function() {
+describe('NGDependencyParser', function() {
 	'use strict';
 
 	beforeEach(function() {
@@ -15,7 +16,7 @@ describe('DependencyParser', function() {
 	 */
 	function parseTestCase(name, onParse) {
 		var path = 'test/cases/'+ name +'.js';
-		var $promise = DependencyParser.parseFile(path);
+		var $promise = BobaParserTools.parseFile(path);
 		var parsedObjects;
 		$promise.then(function(fileObject) {
 			parsedObjects = fileObject.results;
@@ -46,7 +47,7 @@ describe('DependencyParser', function() {
 	}
 
 	it('fails if file is missing', function() {
-		var $promise = DependencyParser.parseFile('xxxxxxWeeee.dontexist.js');
+		var $promise = BobaParserTools.parseFile('xxxxxxWeeee.dontexist.js');
 		waitsFor(function() {
 			return !$promise.isPending();
 		});
