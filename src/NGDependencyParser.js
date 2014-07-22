@@ -1,8 +1,41 @@
 /**
+ * Handles the duties of parsing JavaScript code
  *
- * @type {exports}
+ * @note This implementation uses regular expression. Be gentle.
+ * @TODO: use a real ECMAScript parser
  */
 var NGObjectDetails = require('./NGObjectDetails');
+
+module.exports = {
+	parseCode: parseCode
+};
+
+/**
+ * Main entry for parsing JavaScript codes
+ * @param {String} code
+ * @returns {NGObjectDetails[]}
+ */
+function parseCode(code) {
+	var parseModuleRegex = '\\s*module\\([\'|"]([^)]+)[\'|"]\\)',
+		parseTypeRegex = '\\s*\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
+		parseNameRegex = '\\s*[\'|"]([^\'"]+)[\'|"]',
+		parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
+	var objectsRegex = new RegExp(
+			parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
+	);
+	var matches;
+	var parsedObjects = parseModuleCode(code);
+	while ((matches = objectsRegex.exec(code)) !== null) {
+		var o = new NGObjectDetails(
+			matches[1],
+			matches[2],
+			matches[3],
+			parseDependencies(matches[4])
+		);
+		parsedObjects.push(o);
+	}
+	return parsedObjects;
+}
 
 /**
  * @private
@@ -56,36 +89,4 @@ function parseModuleCode(code) {
 		parsedObjects.push(o);
 	}
 	return parsedObjects;
-};
-
-var dependencyParser = {
-
-	/**
-	 *
-	 * @param {String} code
-	 * @returns {NGObjectDetails[]}
-	 */
-	parseCode: function(code) {
-		var parseModuleRegex = '\\s*module\\([\'|"]([^)]+)[\'|"]\\)',
-			parseTypeRegex = '\\s*\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
-			parseNameRegex = '\\s*[\'|"]([^\'"]+)[\'|"]',
-			parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
-		var objectsRegex = new RegExp(
-			parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
-		);
-		var matches;
-		var parsedObjects = parseModuleCode(code);
-		while ((matches = objectsRegex.exec(code)) !== null) {
-			var o = new NGObjectDetails(
-				matches[1],
-				matches[2],
-				matches[3],
-				parseDependencies(matches[4])
-			);
-			parsedObjects.push(o);
-		}
-		return parsedObjects;
-	}
-};
-
-module.exports = dependencyParser;
+}

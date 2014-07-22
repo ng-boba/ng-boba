@@ -1,7 +1,5 @@
 /**
- * Utility methods for parsing folders
- *
- * @TODO: use a real ECMAScript parser
+ * Utility methods for parsing angular codes
  */
 var fs = require('fs');
 var $q = require('q');
