@@ -56,7 +56,7 @@ function parseFolder(directoryPath) {
 		var qs = [];
 		for (var i = 0; i < files.length; i++) {
 			var fullFilePath = directoryPath + '/' + files[i];
-			var result = NGDependencyParser.parseFile(fullFilePath);
+			var result = parseFile(fullFilePath);
 			result.then(function(fileObject) {
 				fileObjects.push(fileObject);
 			});

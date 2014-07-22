@@ -1,13 +1,12 @@
 
-var angular = require('angular');
-var DependencyParser = require('./NGDependencyParser');
+var BobaParserTools = require('./BobaParserTools');
+var argv = require('minimist')(process.argv.slice(2));
 
-
+console.log('Got arguments!', argv);
 
 var filePath = "test/cases";
-var result = DependencyParser.parseFolder(filePath);
-// var result = DependencyParser.parseFile('test/cases/module-definition-with-controller.js');
-
+var result = BobaParserTools.parseFolder(filePath);
+// var result = BobaParserTools.parseFile('test/cases/module-definition-with-controller.js');
 
 result.then(function(dependencies) {
 	console.log(dependencies);
