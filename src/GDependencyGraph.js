@@ -28,8 +28,16 @@ function GraphNode(fileObject) {
 	var components = this.components = {};
 	var objects = this.fileObject.results;
 	objects.forEach(function(o) {
-		components[o.module] = true;
-		components[o.name] = true;
+
+		if (o.module) {
+			components[o.module] = true;
+			components[o.name] = true;
+		} else {
+
+			// special handling for module definitions
+			components[o.type + '.' + o.name] = true;
+		}
+
 	}, this);
 
 	// serialize the parsed object dependencies into a lookup table
@@ -71,14 +79,13 @@ function convertToNodes(fileObjects) {
 function linkNodes(nodes) {
 
 	// now that we have the nodes, let's find all the edges
-	for (var i = 0; i < nodes.length - 1; i++) {
+	for (var i = 0; i < nodes.length; i++) {
 		var n1 = nodes[i];
-		for (var j = i+1; j < nodes.length; j++) {
+		for (var j = 0; j < nodes.length; j++) {
 			var n2 = nodes[j];
 			if (n1.id == n2.id) {
 				continue;
 			}
-
 			Object.keys(n1.dependencies).forEach(function(name) {
 				if (n2.components[name]) {
 
@@ -100,7 +107,7 @@ DependencyGraph.prototype = {
 	getBundleFiles: function(module) {
 		var rootNode;
 		for (var i = 0; i < this._nodes.length; i++) {
-			if (this._nodes[i].components[module]) {
+			if (this._nodes[i].components['module.' + module]) {
 				rootNode = this._nodes[i];
 				break;
 			}
