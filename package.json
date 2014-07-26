@@ -13,6 +13,7 @@
   },
   "devDependencies": {
 	"minimist": "*",
+	"underscore": "*",
     "karma": "*",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
