@@ -3,6 +3,7 @@
  * @type {DependencyGraph}
  */
 var NGObjectType = require('./NGObjectType');
+var NGNode = require('./NGNode');
 module.exports = DependencyGraph;
 
 /**
@@ -10,51 +11,10 @@ module.exports = DependencyGraph;
  * @param fileObjects
  * @constructor
  */
-function DependencyGraph(fileObjects) {
+function DependencyGraph(fileObjects, configuration) {
 	var nodes = this._nodes = convertToNodes(fileObjects);
 	linkNodes(nodes);
 }
-
-/**
- * Simple graph node object
- * @param fileObject
- * @constructor
- */
-function GraphNode(fileObject) {
-	this.id = fileObject.filePath;
-	this.fileObject = fileObject;
-
-	// serialize the parsed objects into a lookup table
-	var components = this.components = {};
-	var objects = this.fileObject.results;
-	objects.forEach(function(o) {
-
-		if (o.module) {
-			components[o.module] = true;
-			components[o.name] = true;
-		} else {
-
-			// special handling for module definitions
-			components[o.type + '.' + o.name] = true;
-		}
-
-	}, this);
-
-	// serialize the parsed object dependencies into a lookup table
-	var dependencies = this.dependencies = {};
-	var objects = this.fileObject.results;
-	objects.forEach(function(o) {
-		o.dependencies.forEach(function(name) {
-			dependencies[name] = true;
-		}, this);
-	}, this);
-
-	// we don't link yet!
-	this.edges = [];
-}
-
-GraphNode.prototype = {
-};
 
 /**
  * Accepts an array of file objects and generates an array of nodes
@@ -66,7 +26,7 @@ function convertToNodes(fileObjects) {
 	fileObjects.forEach(function(fileObject, index) {
 
 		// we need to convert the file object into a node
-		var node = new GraphNode(fileObject);
+		var node = new NGNode(fileObject);
 		nodes.push(node);
 	});
 	return nodes;
