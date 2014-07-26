@@ -18,7 +18,7 @@ modules = modules.split(',');
  * @type {exports}
  */
 var BobaParserTools = require('./BobaParserTools');
-var GDependencyGraph = require('./GDependencyGraph');
+var NGDependencyGraph = require('./NGDependencyGraph');
 var jNodeLoop = require('./jNodeLoop');
 
 var filePath = "test/project/";
@@ -30,7 +30,7 @@ result.then(function(dependencies) {
 	jNodeLoop(dependencies);
 
 	// create a list of files
-	var g = new GDependencyGraph(dependencies);
+	var g = new NGDependencyGraph(dependencies, config);
 	var files = g.getBundleFiles(modules[0]);
 
 	console.log('\nGDependencyGraph, bundle files:\n', files, '\n');

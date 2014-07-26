@@ -1,17 +1,17 @@
 /**
  * Yup.
- * @type {DependencyGraph}
+ * @type {NGDependencyGraph}
  */
 var NGObjectType = require('./NGObjectType');
 var NGNode = require('./NGNode');
-module.exports = DependencyGraph;
+module.exports = NGDependencyGraph;
 
 /**
  * Creates a graph representation of the file object dependencies
  * @param fileObjects
  * @constructor
  */
-function DependencyGraph(fileObjects, configuration) {
+function NGDependencyGraph(fileObjects, configuration) {
 	var nodes = this._nodes = convertToNodes(fileObjects);
 	linkNodes(nodes);
 }
@@ -57,7 +57,7 @@ function linkNodes(nodes) {
 	}
 }
 
-DependencyGraph.prototype = {
+NGDependencyGraph.prototype = {
 
 	/**
 	 * Retrieves the dependencies required for a file
@@ -83,7 +83,7 @@ DependencyGraph.prototype = {
 };
 
 // TODO: remove this fancy?
-Object.defineProperties(DependencyGraph.prototype, {
+Object.defineProperties(NGDependencyGraph.prototype, {
 	'nodes': {
 		get: function() {
 			return this._nodes;
