@@ -5,21 +5,14 @@
 var _ = require('underscore');
 var $q = require('q');
 var fs = require('fs');
-var NGObjectType = require('../NGObjectType');
-var NGNode = require('../NGNode');
 
-module.exports = ShimGenerator;
+module.exports = {
+	createModuleShim: createModuleShim,
+	createFactoryShim: createFactoryShim
+};
 
-/**
- * Takes a shim module configuration to generate modules for inclusion
- * @param {Object} configuration
- * @constructor
- */
-function ShimGenerator(configuration) {
-	this.modules = parseConfiguration(configuration);
-}
 
-ShimGenerator.createModuleShim = function(moduleName, dependencies) {
+function createModuleShim(moduleName, dependencies) {
 	var stringDependencies = _.map(dependencies, function(dep) {
 		return "'" + dep + "'";
 	});
@@ -28,9 +21,9 @@ ShimGenerator.createModuleShim = function(moduleName, dependencies) {
 		dependencies: stringDependencies.join(',')
 	};
 	return renderTemplate('src/generators/module.tmpl', templateData);
-};
+}
 
-ShimGenerator.createFactoryShim = function(moduleName, factoryName, files, dependencies, exports) {
+function createFactoryShim(moduleName, factoryName, files, dependencies, exports) {
 	var deferred = $q.defer();
 	var fileContents = [];
 	if (files.length < 0) {
@@ -59,7 +52,7 @@ ShimGenerator.createFactoryShim = function(moduleName, factoryName, files, depen
 		deferred.reject();
 	});
 	return deferred.promise;
-};
+}
 
 function renderTemplate(filePath, data) {
 	var deferred = $q.defer();
@@ -83,30 +76,3 @@ function getFileContents(filePath) {
 	});
 	return deferred.promise;
 }
-
-function parseConfiguration(configuration) {
-	var modules = configuration.modules || {};
-	Object.keys(modules).forEach(function(dependencyName) {
-
-		// TODO: fill out existing file/dep stucture with information from config
-		var n = new NGNode({
-			filePath: 'foo/generated/file',
-			dependencies: [
-				'jquery123'
-			]
-		});
-	});
-	return [];
-}
-
-ShimGenerator.prototype = {
-
-	/**
-	 * Creates the files from the modules configuration
-	 * @param {String} outputDirectory
-	 * @returns
-	 */
-	createModules: function(outputDirectory) {
-		throw 'Not implemented';
-	}
-};

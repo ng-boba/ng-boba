@@ -4,15 +4,6 @@ var ShimGenerator = require('../../src/generators/ShimGenerator');
 describe('ShimGenerator', function() {
 	'use strict';
 
-	beforeEach(function () {
-
-	});
-
-//	xit('parses configuration', function() {
-//		var g = new ShimGenerator(getMockConfig());
-//		expect(g.modules.length).toEqual(3);
-//	});
-
 	it('generates a module shim', function() {
 		var deps = [
 			'dep1',
@@ -63,34 +54,4 @@ describe('ShimGenerator', function() {
 			expect(shim.length).toEqual(219);
 		});
 	});
-
-	function getMockConfig() {
-		return {
-			modules: {
-				jquery123: {
-					files: ['bower_includes/jquery/jquery.1.2.3.js'],
-					exports: '$'
-				},
-				jqueryUi: {
-					dependencies: [
-						'jquery123'
-					],
-					files: [
-						'bower_includes/jquery-ui/jquery.ui.js',
-						'bower_includes/jquery-touch-punch/jquery-touch-punch.js'
-					],
-					exports: '$'
-				},
-				backbone: {
-					files: ['bower_includes/backbone/backbone.js'],
-					dependencies: ['underscore'],
-					exports: 'Backbone'
-				},
-				underscore: {
-					files: ['bower_includes/underscore/underscore.js'],
-					exports: '_'
-				}
-			}
-		};
-	}
 });
