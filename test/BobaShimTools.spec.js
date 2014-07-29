@@ -6,6 +6,7 @@ describe('BobaShimTools', function() {
 
 	it('parses configuration', function() {
 
+		BobaShimTools.parseConfig(getMockConfig());
 		// TODO: implementation shim specific configuration parsing
 	});
 
@@ -13,28 +14,22 @@ describe('BobaShimTools', function() {
 		return {
 			outputDirectory: 'bin',
 			modules: {
-				jquery123: {
-					files: ['bower_includes/jquery/jquery.1.2.3.js'],
-					exports: '$'
-				},
-				jqueryUi: {
-					dependencies: [
-						'jquery123'
-					],
-					files: [
-						'bower_includes/jquery-ui/jquery.ui.js',
-						'bower_includes/jquery-touch-punch/jquery-touch-punch.js'
-					],
+				jquery: {
+					files: ['bower_components/jquery/dist/jquery.js'],
 					exports: '$'
 				},
 				backbone: {
-					files: ['bower_includes/backbone/backbone.js'],
+					files: ['bower_components/backbone/backbone.js'],
 					dependencies: ['underscore'],
 					exports: 'Backbone'
 				},
 				underscore: {
-					files: ['bower_includes/underscore/underscore.js'],
+					files: ['bower_components/underscore/underscore.js'],
 					exports: '_'
+				},
+				bootstrap: {
+					files: ['bower_components/bootstrap/dist/js/bootstrap.js'],
+					dependencies: ['jquery']
 				}
 			}
 		};

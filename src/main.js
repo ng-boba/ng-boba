@@ -24,13 +24,37 @@ var jNodeLoop = require('./jNodeLoop');
 var filePath = "test/project/";
 var result = BobaParserTools.parseFolder(filePath);
 
+/**
+ * Enables shimming additional libraries as needed
+ */
+// TODO: see BobaShimTools.spec.js for a larger shim configuration example
+var sampleConfig = {
+	modules: {
+		jquery123: {
+			dependencies: [
+			],
+			files: [
+				'src/jquery'
+			]
+		},
+		jqueryUI: {
+			files: [
+				'src/jquery.ui'
+			],
+			dependencies: [
+				'jquery'
+			]
+		}
+	}
+};
+
 result.then(function(dependencies) {
 	console.log('Dependencies:\n', dependencies);
 
 	jNodeLoop(dependencies);
 
 	// create a list of files
-	var g = new NGDependencyGraph(dependencies, config);
+	var g = new NGDependencyGraph(dependencies, {});
 	var files = g.getBundleFiles(modules[0]);
 
 	console.log('\nGDependencyGraph, bundle files:\n', files, '\n');
