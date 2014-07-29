@@ -23,10 +23,10 @@ function NGDependencyGraph(fileObjects, configuration) {
  */
 function convertToNodes(fileObjects) {
 	var nodes = this._nodes = [];
-	fileObjects.forEach(function(fileObject, index) {
+	fileObjects.forEach(function(fileObject) {
 
 		// we need to convert the file object into a node
-		var node = new NGNode(fileObject);
+		var node = new NGNode(fileObject.filePath, fileObject.results);
 		nodes.push(node);
 	});
 	return nodes;
