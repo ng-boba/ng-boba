@@ -4,7 +4,7 @@
  * @note This implementation uses regular expression. Be gentle.
  * @TODO: use a real ECMAScript parser
  */
-var NGObjectDetails = require('./data/NGObjectDetails');
+var NGObjectDetails = require('./data/NGComponent');
 
 module.exports = {
 	parseCode: parseCode

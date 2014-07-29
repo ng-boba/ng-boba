@@ -2,7 +2,7 @@
  * Yup.
  * @type {NGDependencyGraph}
  */
-var NGObjectType = require('./NGObjectType');
+var NGObjectType = require('./NGComponentType');
 var NGNode = require('./NGNode');
 module.exports = NGDependencyGraph;
 

@@ -1,6 +1,6 @@
 
-var NGObjectDetails = require('../../src/data/NGObjectDetails');
-var NGObjectType = require('../../src/data/NGObjectType');
+var NGComponent = require('../../src/data/NGComponent');
+var NGComponentType = require('../../src/data/NGComponentType');
 
 module.exports = {
 	getDependencies: getDependencies
@@ -16,7 +16,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file1.js',
 					results: [
-						new NGObjectDetails(null, NGObjectType.MODULE, 'main', [
+						new NGComponent(null, NGComponentType.MODULE, 'main', [
 							'moduleIncluded'
 						])
 					]
@@ -24,7 +24,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file2.js',
 					results: [
-						new NGObjectDetails('moduleIncluded', NGObjectType.DIRECTIVE, 'awesomeDirective', [
+						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective', [
 
 						])
 					]
@@ -32,7 +32,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file3.js',
 					results: [
-						new NGObjectDetails('moduleExcluded', NGObjectType.CONTROLLER, 'ExcludedController', [
+						new NGComponent('moduleExcluded', NGComponentType.CONTROLLER, 'ExcludedController', [
 
 						])
 					]
@@ -44,7 +44,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file1.js',
 					results: [
-						new NGObjectDetails(null, NGObjectType.MODULE, 'main', [
+						new NGComponent(null, NGComponentType.MODULE, 'main', [
 							'moduleIncluded'
 						])
 					]
@@ -52,7 +52,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file2.js',
 					results: [
-						new NGObjectDetails('moduleIncluded', NGObjectType.DIRECTIVE, 'awesomeDirective', [
+						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective', [
 
 						])
 					]
@@ -60,7 +60,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file3.js',
 					results: [
-						new NGObjectDetails('moduleIncluded', NGObjectType.CONTROLLER, 'IncludedController', [
+						new NGComponent('moduleIncluded', NGComponentType.CONTROLLER, 'IncludedController', [
 
 						])
 					]
