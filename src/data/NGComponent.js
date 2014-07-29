@@ -13,7 +13,7 @@ module.exports = NGComponent;
  */
 function NGComponent(module, type, name, dependencies) {
 	this.module = module;
-	if (!NGComponentType[type]) {
+	if (!NGComponentType[type.toUpperCase()]) {
 		throw 'Invalid component type: ' + type;
 	}
 	this.type = type;
