@@ -1,0 +1,22 @@
+{
+    "components": {
+        "jquery123": {
+            "dependencies": [],
+            "files": [
+                "src/jquery"
+            ]
+        },
+        "jqueryUI": {
+            "files": [
+                "src/jquery.ui"
+            ],
+            "dependencies": [
+                "jquery"
+            ]
+        }
+    },
+    "modules": [
+        "jModule"
+    ],
+    "folder": "test/project"
+}
