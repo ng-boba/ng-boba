@@ -4,7 +4,7 @@
  * @note This implementation uses regular expression. Be gentle.
  * @TODO: use a real ECMAScript parser
  */
-var NGObjectDetails = require('./NGObjectDetails');
+var NGObjectDetails = require('./data/NGObjectDetails');
 
 module.exports = {
 	parseCode: parseCode

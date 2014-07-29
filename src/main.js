@@ -18,7 +18,7 @@ modules = modules.split(',');
  * @type {exports}
  */
 var BobaParserTools = require('./BobaParserTools');
-var NGDependencyGraph = require('./NGDependencyGraph');
+var NGDependencyGraph = require('./data/NGDependencyGraph');
 var jNodeLoop = require('./jNodeLoop');
 
 var filePath = "test/project/";

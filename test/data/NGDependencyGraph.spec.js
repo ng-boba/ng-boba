@@ -1,6 +1,6 @@
 
-var NGDependencyGraph = require('../src/NGDependencyGraph');
-var MockFileObjects = require('./mock/MockFileObjects');
+var NGDependencyGraph = require('../../src/data/NGDependencyGraph');
+var MockFileObjects = require('./../mock/MockFileObjects');
 
 describe('NGDependencyGraph', function() {
 	'use strict';
@@ -33,4 +33,13 @@ describe('NGDependencyGraph', function() {
 		expect(files[0]).toEqual('file2.js');
 	});
 
+	it('generates file list for all module files', function() {
+		var g = new NGDependencyGraph(MockFileObjects.getDependencies('moduleIncluded'));
+		var files = g.getBundleFiles('main');
+		expect(files.length).toEqual(3);
+		expect(files[0]).toEqual('file2.js');
+		expect(files[1]).toEqual('file3.js');
+	});
+
+	// TODO: include test to ensure failure when non-modules are added as module dependencies
 });

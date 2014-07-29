@@ -1,6 +1,6 @@
 
-var NGObjectDetails = require('../../src/NGObjectDetails');
-var NGObjectType = require('../../src/NGObjectType');
+var NGObjectDetails = require('../../src/data/NGObjectDetails');
+var NGObjectType = require('../../src/data/NGObjectType');
 
 module.exports = {
 	getDependencies: getDependencies
@@ -33,6 +33,34 @@ function getDependencies(setName) {
 					filePath: 'file3.js',
 					results: [
 						new NGObjectDetails('moduleExcluded', NGObjectType.CONTROLLER, 'ExcludedController', [
+
+						])
+					]
+				}
+			];
+
+		case 'moduleIncluded':
+			return [
+				{
+					filePath: 'file1.js',
+					results: [
+						new NGObjectDetails(null, NGObjectType.MODULE, 'main', [
+							'moduleIncluded'
+						])
+					]
+				},
+				{
+					filePath: 'file2.js',
+					results: [
+						new NGObjectDetails('moduleIncluded', NGObjectType.DIRECTIVE, 'awesomeDirective', [
+
+						])
+					]
+				},
+				{
+					filePath: 'file3.js',
+					results: [
+						new NGObjectDetails('moduleIncluded', NGObjectType.CONTROLLER, 'IncludedController', [
 
 						])
 					]
