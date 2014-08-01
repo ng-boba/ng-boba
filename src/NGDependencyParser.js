@@ -4,7 +4,8 @@
  * @note This implementation uses regular expression. Be gentle.
  * @TODO: use a real ECMAScript parser
  */
-var NGObjectDetails = require('./data/NGComponent');
+var NGModule = require('./data/NGModule');
+var NGComponent = require('./data/NGComponent');
 
 module.exports = {
 	parseCode: parseCode
@@ -26,7 +27,7 @@ function parseCode(code) {
 	var matches;
 	var parsedObjects = parseModuleCode(code);
 	while ((matches = objectsRegex.exec(code)) !== null) {
-		var o = new NGObjectDetails(
+		var o = new NGComponent(
 			matches[1],
 			matches[2],
 			matches[3],
@@ -69,8 +70,6 @@ function parseDependencies(s, asString) {
  * @returns {Array}
  */
 function parseModuleCode(code) {
-	var regEx = new RegExp('module\\([\'|"]([^)\'"]+)[\'|"],', 'g');
-
 	var parseModuleRegex = 'module\\([\'|"]([^)\'"]+)[\'|"],\\s*';
 	var parseDependenciesRegex = '\\[([^)]*)\\]';
 	var objectsRegex = new RegExp(
@@ -80,9 +79,7 @@ function parseModuleCode(code) {
 	var parsedObjects = [];
 	var matches;
 	while ((matches = objectsRegex.exec(code)) !== null) {
-		var o = new NGObjectDetails(
-			null, // modules are null
-			'module',
+		var o = new NGModule(
 			matches[1],
 			parseDependencies(matches[2], true)
 		);

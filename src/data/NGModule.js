@@ -1,16 +1,23 @@
 
+const NGComponent = require('./NGComponent');
+const NGComponentType = require('./NGComponentType');
+const _ = require('underscore');
+
 module.exports = NGModule;
 
-function NGModule(name) {
+function NGModule(name, dependencies) {
+	NGComponent.call(this, null, NGComponentType.MODULE, name, dependencies);
+
+	// modules have child components
 	this.components = {};
-	this.files = [];
 }
 
-NGModule.prototype = {
-	addComponent: function(name, filePath) {
+_.extend(NGModule.prototype, NGComponent.prototype, {
+	addComponent: function(component) {
+		var name = component.name;
 		if (this.components[name]) {
-			throw 'Component already registered with module!';
+			throw 'Component already registered with module! ' + name + ' ' + this.components[name] + ' ' + this.name + ' ';
 		}
-		this.components[name] = filePath;
+		this.components[name] = component;
 	}
-};
+});
