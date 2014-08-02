@@ -1,20 +1,8 @@
 {
-    "components": {
-        "jquery123": {
-            "dependencies": [],
-            "files": [
-                "src/jquery"
-            ]
-        },
-        "jqueryUI": {
-            "files": [
-                "src/jquery.ui"
-            ],
-            "dependencies": [
-                "jquery"
-            ]
-        }
-    },
+    "dependencies": [
+        "src/jquery/jquery.js",
+        "src/jquery/jquery2.js"
+    ],
     "modules": [
         "jModule"
     ],

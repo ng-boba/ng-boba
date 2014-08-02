@@ -40,6 +40,11 @@ function addBoba(config) {
 			parsedFiles.forEach(function(fileObject) {
 				project.addFileComponents(fileObject.filePath, fileObject.results);
 			});
+
+			config.dependencies.forEach(function(dependency) {
+				project.addBaseDependency(dependency);
+			});
+			
 			var files = project.getBundleFiles(config.modules[0]);
 			console.log(files);
 			return files;
