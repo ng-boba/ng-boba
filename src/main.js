@@ -66,6 +66,8 @@ result.then(function(parsedFiles) {
 
 	console.log('');
 	console.log('Generated project graph');
+	project.addBaseDependency('src/jquery/jquery.js');
+	project.addBaseDependency('src/jquery/jquery2.js');
 	console.log(project.getBundleFiles('jModule'));
 	return;
 	//var files = g.getBundleFiles(modules[0]);

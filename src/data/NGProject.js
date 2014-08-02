@@ -16,9 +16,19 @@ module.exports = NGProject;
  */
 function NGProject() {
 	this.modules = {};
+	this.baseDependencies = [];
 }
 
 NGProject.prototype = {
+
+	/**
+	 * Base dependencies are libraries that are required outside of the
+	 * angular framework. This might be jquery, underscore, etc
+	 * @param {String} filePath
+	 */
+	addBaseDependency: function(filePath) {
+		this.baseDependencies.push(filePath);
+	},
 
 	addFileComponents: function(filePath, components) {
 		components.forEach(function(c) {
@@ -75,6 +85,9 @@ NGProject.prototype = {
 			modulePostOrder(depModule, files);
 		}
 		modulePostOrder(rootModule, files);
+
+		// include base dependencies
+		files.unshift.apply(files, this.baseDependencies);
 
 		return files;
 	}
