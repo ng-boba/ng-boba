@@ -13,7 +13,8 @@ fs.readFile(file, 'utf8', function (err, data) {
 
 
 var BobaParserTools = require('./BobaParserTools');
-var NGDependencyGraph = require('./data/NGDependencyGraph');
+var NGProject = require('./data/NGProject');
+
 function addBoba(config) {
 	if (!config) {
 		throw ('Boba needs a config to run.');
@@ -32,10 +33,14 @@ function addBoba(config) {
 	}
 
 	if (config.folder) {
-		BobaParserTools.parseFolder(config.folder).then(function(dependencies) {
-			
-			var g = new NGDependencyGraph(dependencies, {});
-			var files = g.getBundleFiles(config.modules[0]);
+
+		BobaParserTools.parseFolder(config.folder).then(function(parsedFiles) {
+
+			var project = new NGProject();
+			parsedFiles.forEach(function(fileObject) {
+				project.addFileComponents(fileObject.filePath, fileObject.results);
+			});
+			var files = project.getBundleFiles(config.modules[0]);
 			console.log(files);
 			return files;
 		})
