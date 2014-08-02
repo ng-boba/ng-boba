@@ -5,7 +5,6 @@
 const NGComponentType = require('./NGComponentType');
 const NGComponent = require('./NGComponent');
 const NGModule = require('./NGModule');
-//var NGNode = require('./NGNode');
 
 module.exports = NGProject;
 
