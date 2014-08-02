@@ -1,4 +1,5 @@
 
+var ParserTestConfig = require('./ParserTestConfig');
 var BobaParserTools = require('../../src/parser/BobaParserTools');
 
 describe('BobaParserTools', function() {
@@ -14,7 +15,7 @@ describe('BobaParserTools', function() {
 	 * @param {Function} onParse - callback to invoke after the file is parsed
 	 */
 	function parseTestCase(name, onParse) {
-		var path = 'test/cases/' + name + '.js';
+		var path = ParserTestConfig.TEST_CASE_DIRECTORY + name + '.js';
 		var $promise = BobaParserTools.parseFile(path);
 		var parsedObjects;
 		$promise.then(function (fileObject) {
@@ -29,7 +30,7 @@ describe('BobaParserTools', function() {
 	}
 
 	it('parses a file', function() {
-		var path = 'test/cases/factory.js';
+		var path = ParserTestConfig.TEST_CASE_DIRECTORY + 'factory.js';
 		var $promise = BobaParserTools.parseFile(path);
 		var parsedObjects;
 		$promise.then(function (fileObject) {
@@ -44,8 +45,7 @@ describe('BobaParserTools', function() {
 	});
 
 	it('parses a folder with a trailing slash', function() {
-		var path = 'test/cases/';
-		var $promise = BobaParserTools.parseFolder(path);
+		var $promise = BobaParserTools.parseFolder(ParserTestConfig.TEST_CASE_DIRECTORY);
 		var parsedObjects;
 		$promise.then(function (fileObject) {
 			parsedObjects = fileObject.results;
@@ -59,7 +59,8 @@ describe('BobaParserTools', function() {
 	});
 
 	it('parses a folder without a trailing slash', function() {
-		var path = 'test/cases';
+		var path = ParserTestConfig.TEST_CASE_DIRECTORY;
+		path = path.substr(0, path.length - 1); // remove trailing slash
 		var $promise = BobaParserTools.parseFolder(path);
 		var parsedObjects;
 		$promise.then(function (fileObject) {

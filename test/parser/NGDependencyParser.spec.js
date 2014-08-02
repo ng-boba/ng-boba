@@ -1,4 +1,5 @@
 
+var ParserTestConfig = require('./ParserTestConfig');
 var DependencyParser = require('../../src/parser/NGDependencyParser');
 var BobaParserTools = require('../../src/parser/BobaParserTools');
 
@@ -15,7 +16,7 @@ describe('NGDependencyParser', function() {
 	 * @param {Function} onParse - callback to invoke after the file is parsed
 	 */
 	function parseTestCase(name, onParse) {
-		var path = 'test/cases/'+ name +'.js';
+		var path = ParserTestConfig.TEST_CASE_DIRECTORY + name +'.js';
 		var $promise = BobaParserTools.parseFile(path);
 		var parsedObjects;
 		$promise.then(function(fileObject) {
