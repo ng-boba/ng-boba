@@ -55,7 +55,6 @@ describe('NGProject', function() {
 		applyDeps(p, deps);
 		var files = p.getBundleFiles('main');
 		expect(files.length).toEqual(4);
-		console.log(files);
 		expect(files[0]).toEqual('file4.js');
 		expect(files[1]).toEqual('file2.js');
 	});
