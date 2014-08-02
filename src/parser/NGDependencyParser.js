@@ -4,8 +4,8 @@
  * @note This implementation uses regular expression. Be gentle.
  * @TODO: use a real ECMAScript parser
  */
-var NGModule = require('./data/NGModule');
-var NGComponent = require('./data/NGComponent');
+var NGModule = require('./../data/NGModule');
+var NGComponent = require('./../data/NGComponent');
 
 module.exports = {
 	parseCode: parseCode

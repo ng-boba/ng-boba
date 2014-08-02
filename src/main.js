@@ -1,7 +1,7 @@
 /**
  * ng-boba dev main
  */
-var BobaParserTools = require('./BobaParserTools');
+var BobaParserTools = require('./parser/BobaParserTools');
 var NGProject = require('./data/NGProject');
 
 console.log('\nng-boba\n');

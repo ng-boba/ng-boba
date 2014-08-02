@@ -12,7 +12,7 @@ fs.readFile(file, 'utf8', function (err, data) {
 })
 
 
-var BobaParserTools = require('./BobaParserTools');
+var BobaParserTools = require('./parser/BobaParserTools');
 var NGProject = require('./data/NGProject');
 
 function addBoba(config) {
@@ -44,7 +44,7 @@ function addBoba(config) {
 			config.dependencies.forEach(function(dependency) {
 				project.addBaseDependency(dependency);
 			});
-			
+
 			var files = project.getBundleFiles(config.modules[0]);
 			console.log(files);
 			return files;

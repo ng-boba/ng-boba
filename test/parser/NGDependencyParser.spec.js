@@ -1,6 +1,6 @@
 
-var DependencyParser = require('../src/NGDependencyParser');
-var BobaParserTools = require('../src/BobaParserTools');
+var DependencyParser = require('../../src/parser/NGDependencyParser');
+var BobaParserTools = require('../../src/parser/BobaParserTools');
 
 describe('NGDependencyParser', function() {
 	'use strict';

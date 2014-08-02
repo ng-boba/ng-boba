@@ -1,5 +1,5 @@
 
-var BobaParserTools = require('../src/BobaParserTools');
+var BobaParserTools = require('../../src/parser/BobaParserTools');
 
 describe('BobaParserTools', function() {
 	'use strict';
