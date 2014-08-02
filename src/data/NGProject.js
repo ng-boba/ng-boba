@@ -38,19 +38,19 @@ NGProject.prototype = {
 	 */
 	addFileComponents: function(filePath, components) {
 		components.forEach(function(c) {
-			var module;
+			var ngModule;
 			switch (c.type) {
 				case NGComponentType.MODULE:
-					module = this.getModule(c.name);
-					module.dependencies = c.dependencies;
-					module.setFilePath(filePath);
+					ngModule = this.getModule(c.name);
+					ngModule.dependencies = c.dependencies;
+					ngModule.setFilePath(filePath);
 					break;
 
 				// TODO: catch other types that are unsupported
 				default:
-					module = this.getModule(c.module);
+					ngModule = this.getModule(c.module);
 					c.setFilePath(filePath);
-					module.addComponent(c);
+					ngModule.addComponent(c);
 					break;
 			}
 		}, this);
@@ -62,16 +62,16 @@ NGProject.prototype = {
 	 * @param filePath (optional)
 	 */
 	getModule: function(name) {
-		var module = this.modules[name];
-		if (!module) {
-			module = this.modules[name] = new NGModule(name);
+		var ngModule = this.modules[name];
+		if (!ngModule) {
+			ngModule = this.modules[name] = new NGModule(name);
 		}
-		return module;
+		return ngModule;
 	},
 
 	/**
 	 * Retrieves the dependencies required for a file
-	 * @param {String} module
+	 * @param {String} moduleName
 	 * @returns {String[]}
 	 */
 	getBundleFiles: function(moduleName) {
@@ -86,6 +86,10 @@ NGProject.prototype = {
 		for (var i = 0; i < rootModule.dependencies.length; i++) {
 			var depModuleName = rootModule.dependencies[i];
 			var depModule = this.modules[depModuleName];
+			if (!depModule) {
+				console.error('Missing module:', moduleName);
+				throw 'Missing module';
+			}
 			traverseModule(depModule, files);
 		}
 		traverseModule(rootModule, files);
@@ -97,21 +101,18 @@ NGProject.prototype = {
 	}
 };
 
-function traverseModule(module, files) {
+function traverseModule(ngModule, files) {
 
 	// TODO: include additional rules for config & provider, etc
 	// include the module before dependencies
-	files.push(module.path);
+	files.push(ngModule.path);
 
-	Object.keys(module.components).forEach(function(name) {
-		var component = module.components[name];
+	Object.keys(ngModule.components).forEach(function(name) {
+		var component = ngModule.components[name];
 		files.push(component.path);
 	});
-	if (!module) {
-		throw 'nere';
-	}
-	if (!module.path) {
-		console.error('Missing module definition:', module.name);
+	if (!ngModule.path) {
+		console.error('Missing module definition:', ngModule.name);
 		throw 'Missing module definition';
 	}
 }

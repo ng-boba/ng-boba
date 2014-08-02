@@ -42,14 +42,6 @@ describe('NGProject', function() {
 		expect(files[0]).toEqual('file2.js');
 	});
 
-	it('throws error if module definition is missing', function() {
-		var deps = MockFileObjects.getDependencies('missingModuleDefinition');
-		applyDeps(p, deps);
-		expect(function() {
-			var files = p.getBundleFiles('main');
-		}).toThrow('Missing module definition');
-	});
-
 	it('includes module definition before components', function() {
 		var deps = MockFileObjects.getDependencies('allModuleFilesIncluded');
 		applyDeps(p, deps);
@@ -57,6 +49,22 @@ describe('NGProject', function() {
 		expect(files.length).toEqual(4);
 		expect(files[0]).toEqual('file4.js');
 		expect(files[1]).toEqual('file2.js');
+	});
+
+	it('throws error if module dependency is missing', function() {
+		var deps = MockFileObjects.getDependencies('missingModule');
+		applyDeps(p, deps);
+		expect(function() {
+			var files = p.getBundleFiles('main');
+		}).toThrow('Missing module');
+	});
+
+	it('throws error if module definition is missing', function() {
+		var deps = MockFileObjects.getDependencies('missingModuleDefinition');
+		applyDeps(p, deps);
+		expect(function() {
+			var files = p.getBundleFiles('main');
+		}).toThrow('Missing module definition');
 	});
 
 	// TODO: include test to ensure failure when non-modules are added as module dependencies

@@ -37,24 +37,6 @@ function getDependencies(setName) {
 				}
 			];
 
-		case 'missingModuleDefinition':
-			return [
-				{
-					filePath: 'file1.js',
-					results: [
-						new NGModule('main', [
-							'moduleIncluded'
-						])
-					]
-				},
-				{
-					filePath: 'file2.js',
-					results: [
-						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective')
-					]
-				}
-			];
-
 		case 'allModuleFilesIncluded':
 			return [
 				{
@@ -89,5 +71,36 @@ function getDependencies(setName) {
 				}
 			];
 
+		// error case
+		case 'missingModule':
+			return [
+				{
+					filePath: 'file1.js',
+					results: [
+						new NGModule('main', [
+							'missingModule'
+						])
+					]
+				}
+			];
+
+		// error case
+		case 'missingModuleDefinition':
+			return [
+				{
+					filePath: 'file1.js',
+					results: [
+						new NGModule('main', [
+							'missingModule'
+						])
+					]
+				},
+				{
+					filePath: 'file2.js',
+					results: [
+						new NGComponent('missingModule', NGComponentType.DIRECTIVE, 'awesomeDirective')
+					]
+				}
+			];
 	}
 }
