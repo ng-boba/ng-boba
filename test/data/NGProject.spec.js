@@ -67,5 +67,4 @@ describe('NGProject', function() {
 		}).toThrow('Missing module definition');
 	});
 
-	// TODO: include test to ensure failure when non-modules are added as module dependencies
 });
