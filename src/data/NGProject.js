@@ -5,6 +5,7 @@
 const NGComponentType = require('./NGComponentType');
 const NGComponent = require('./NGComponent');
 const NGModule = require('./NGModule');
+const _ = require('underscore');
 
 module.exports = NGProject;
 
@@ -63,7 +64,7 @@ NGProject.prototype = {
 	getModule: function(name) {
 		var module = this.modules[name];
 		if (!module) {
-			module = this.modules[name] = new NGModule(null, NGComponentType.MODULE, name);
+			module = this.modules[name] = new NGModule(name);
 		}
 		return module;
 	},
@@ -76,7 +77,8 @@ NGProject.prototype = {
 	getBundleFiles: function(moduleName) {
 		var rootModule = this.modules[moduleName];
 		if (!rootModule) {
-			throw 'Could not locate the file for module: ' + moduleName;
+			console.error('Missing module:', moduleName);
+			throw 'Missing module';
 		}
 		var files = [];
 
@@ -84,31 +86,32 @@ NGProject.prototype = {
 		for (var i = 0; i < rootModule.dependencies.length; i++) {
 			var depModuleName = rootModule.dependencies[i];
 			var depModule = this.modules[depModuleName];
-			if (!depModule) {
-				throw 'Could not find module: ' + depModuleName;
-			}
-			modulePostOrder(depModule, files);
+			traverseModule(depModule, files);
 		}
-		modulePostOrder(rootModule, files);
+		traverseModule(rootModule, files);
 
 		// include base dependencies
 		files.unshift.apply(files, this.baseDependencies);
 
-		return files;
+		return _.uniq(files);
 	}
 };
 
-function modulePostOrder(depModule, files) {
-	Object.keys(depModule.components).forEach(function(name) {
-		var component = depModule.components[name];
+function traverseModule(module, files) {
+
+	// TODO: include additional rules for config & provider, etc
+	// include the module before dependencies
+	files.push(module.path);
+
+	Object.keys(module.components).forEach(function(name) {
+		var component = module.components[name];
 		files.push(component.path);
 	});
-	files.push(depModule.path);
-}
-
-function postOrderTraversal(node, files) {
-	for (var i = 0, iM = node.edges.length; i < iM; i++) {
-		postOrderTraversal(node.edges[i], files);
+	if (!module) {
+		throw 'nere';
 	}
-	files.push(node.id);
+	if (!module.path) {
+		console.error('Missing module definition:', module.name);
+		throw 'Missing module definition';
+	}
 }

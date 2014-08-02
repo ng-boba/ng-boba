@@ -24,10 +24,9 @@ describe('NGProject', function() {
 		expect(_.size(p.modules)).toEqual(3);
 	});
 
-	it('supports 1-to-1 and links dependencies from file1 to file2', function() {
+	it('supports basic project dependencies', function() {
 		var deps = MockFileObjects.getDependencies();
 		applyDeps(p, deps);
-
 		var main = p.getModule('main');
 		var moduleIncluded = p.getModule('moduleIncluded');
 		expect(main.hasDependency('moduleIncluded')).toBeTruthy();
@@ -35,23 +34,30 @@ describe('NGProject', function() {
 		expect(moduleIncluded.getComponent('awesomeDirective')).toBeDefined();
 	});
 
-	it('generates 1-to-1 file list without duplicates', function() {
+	it('generates file list without duplicates', function() {
 		var deps = MockFileObjects.getDependencies();
 		applyDeps(p, deps);
-
 		var files = p.getBundleFiles('main');
 		expect(files.length).toEqual(2);
 		expect(files[0]).toEqual('file2.js');
 	});
 
-	xit('generates file list for all module files', function() {
-		var deps = MockFileObjects.getDependencies('moduleIncluded');
+	it('throws error if module definition is missing', function() {
+		var deps = MockFileObjects.getDependencies('missingModuleDefinition');
 		applyDeps(p, deps);
+		expect(function() {
+			var files = p.getBundleFiles('main');
+		}).toThrow('Missing module definition');
+	});
 
-		var files = g.getBundleFiles('main');
-		expect(files.length).toEqual(3);
-		expect(files[0]).toEqual('file2.js');
-		expect(files[1]).toEqual('file3.js');
+	it('includes module definition before components', function() {
+		var deps = MockFileObjects.getDependencies('allModuleFilesIncluded');
+		applyDeps(p, deps);
+		var files = p.getBundleFiles('main');
+		expect(files.length).toEqual(4);
+		console.log(files);
+		expect(files[0]).toEqual('file4.js');
+		expect(files[1]).toEqual('file2.js');
 	});
 
 	// TODO: include test to ensure failure when non-modules are added as module dependencies

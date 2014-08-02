@@ -16,11 +16,15 @@ module.exports = NGComponent;
 function NGComponent(moduleName, type, name, dependencies) {
 	this.module = moduleName;
 	if (!NGComponentType[type.toUpperCase()]) {
-		console.warn('Invalid component type:' + type);
-		throw 'Invalid component type: ' + type;
+		console.error('Invalid component type', type);
+		throw 'Invalid component type';
 	}
 	this.type = type;
 	this.name = name;
+	if (dependencies && !_.isArray(dependencies)) {
+		console.error('Invalid component dependencies', dependencies);
+		throw 'Invalid component dependencies';
+	}
 	this.dependencies = dependencies || [];
 }
 
@@ -33,7 +37,8 @@ NGComponent.prototype = {
 
 	setFilePath: function(path) {
 		if (this.path && this.path != path) {
-			throw 'Component already has a path specified!';
+			console.error('Duplicate component path', this.path, path);
+			throw 'Duplicate component path';
 		}
 		this.path = path;
 	}

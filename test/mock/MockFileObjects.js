@@ -1,4 +1,5 @@
 
+var NGModule = require('../../src/data/NGModule');
 var NGComponent = require('../../src/data/NGComponent');
 var NGComponentType = require('../../src/data/NGComponentType');
 
@@ -11,12 +12,12 @@ function getDependencies(setName) {
 
 		// one to one dependencies
 		default:
-		case '121':
+		case 'basicProject':
 			return [
 				{
 					filePath: 'file1.js',
 					results: [
-						new NGComponent(null, NGComponentType.MODULE, 'main', [
+						new NGModule('main', [
 							'moduleIncluded'
 						])
 					]
@@ -24,7 +25,7 @@ function getDependencies(setName) {
 				{
 					filePath: 'file2.js',
 					results: [
-						new NGComponent(null, NGComponentType.MODULE, 'moduleIncluded'),
+						new NGModule('moduleIncluded'),
 						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective')
 					]
 				},
@@ -36,12 +37,30 @@ function getDependencies(setName) {
 				}
 			];
 
-		case 'moduleIncluded':
+		case 'missingModuleDefinition':
 			return [
 				{
 					filePath: 'file1.js',
 					results: [
-						new NGComponent(null, NGComponentType.MODULE, 'main', [
+						new NGModule('main', [
+							'moduleIncluded'
+						])
+					]
+				},
+				{
+					filePath: 'file2.js',
+					results: [
+						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective')
+					]
+				}
+			];
+
+		case 'allModuleFilesIncluded':
+			return [
+				{
+					filePath: 'file1.js',
+					results: [
+						new NGModule('main', [
 							'moduleIncluded'
 						])
 					]
@@ -60,6 +79,12 @@ function getDependencies(setName) {
 						new NGComponent('moduleIncluded', NGComponentType.CONTROLLER, 'IncludedController', [
 
 						])
+					]
+				},
+				{
+					filePath: 'file4.js',
+					results: [
+						new NGModule('moduleIncluded')
 					]
 				}
 			];
