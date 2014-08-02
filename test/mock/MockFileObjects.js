@@ -24,17 +24,14 @@ function getDependencies(setName) {
 				{
 					filePath: 'file2.js',
 					results: [
-						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective', [
-
-						])
+						new NGComponent(null, NGComponentType.MODULE, 'moduleIncluded'),
+						new NGComponent('moduleIncluded', NGComponentType.DIRECTIVE, 'awesomeDirective')
 					]
 				},
 				{
 					filePath: 'file3.js',
 					results: [
-						new NGComponent('moduleExcluded', NGComponentType.CONTROLLER, 'ExcludedController', [
-
-						])
+						new NGComponent('moduleExcluded', NGComponentType.CONTROLLER, 'ExcludedController')
 					]
 				}
 			];

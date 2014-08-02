@@ -1,5 +1,6 @@
 
 var NGComponentType = require('./NGComponentType');
+var _ = require('underscore');
 
 module.exports = NGComponent;
 
@@ -24,6 +25,12 @@ function NGComponent(moduleName, type, name, dependencies) {
 }
 
 NGComponent.prototype = {
+	hasDependency: function(name) {
+		return _.any(this.dependencies, function(dep) {
+			return dep == name;
+		});
+	},
+
 	setFilePath: function(path) {
 		if (this.path && this.path != path) {
 			throw 'Component already has a path specified!';

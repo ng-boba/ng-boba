@@ -11,10 +11,11 @@ module.exports = NGProject;
 
 /**
  * Creates a graph representation of the file object dependencies
- * @param fileObjects
+ * @param {String} name - project name
  * @constructor
  */
-function NGProject() {
+function NGProject(name) {
+	this.name = name
 	this.modules = {};
 	this.baseDependencies = [];
 }
@@ -30,6 +31,11 @@ NGProject.prototype = {
 		this.baseDependencies.push(filePath);
 	},
 
+	/**
+	 * Adds components to the project
+	 * @param {String} filePath
+	 * @param {NGComponent} components
+	 */
 	addFileComponents: function(filePath, components) {
 		components.forEach(function(c) {
 			var module;

@@ -13,6 +13,10 @@ function NGModule(name, dependencies) {
 }
 
 _.extend(NGModule.prototype, NGComponent.prototype, {
+	getComponent: function(name) {
+		return this.components[name];
+	},
+
 	addComponent: function(component) {
 		var name = component.name;
 		if (this.components[name]) {
