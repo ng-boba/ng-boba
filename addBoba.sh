@@ -1,2 +1,2 @@
 #!/bin/sh
-node src/boba-main.js "$@"
+node src/ng-boba-main.js "$@"
