@@ -6,5 +6,6 @@
     "modules": [
         "jModule"
     ],
-    "folder": "test/project"
+    "xfolder": "test/project",
+    "files": ["test/project/jModule.js", "test/project/dep0.js", "test/project/dep1.js"]
 }

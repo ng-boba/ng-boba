@@ -7,6 +7,7 @@ var NGDependencyParser = require('./NGDependencyParser');
 
 module.exports = {
 	parseFile: parseFile,
+    parseFiles: parseFiles,
 	parseFolder: parseFolder
 };
 
@@ -89,4 +90,25 @@ function parseFolder(directoryPath) {
 		});
 	});
 	return deferred.promise;
+}
+
+
+function parseFiles(filePaths) {
+    var deferred = $q.defer();
+    var fileObjects = [];
+    var results = [];
+
+    filePaths.forEach(function(filePath) {
+
+        var result = parseFile(filePath).then(function(fileObject) {
+            if (fileObject) {
+                fileObjects.push(fileObject);
+            }
+        });
+        results.push(result);
+    });
+    $q.allSettled(results).finally(function() {
+        deferred.resolve(fileObjects);
+    });
+    return deferred.promise;
 }

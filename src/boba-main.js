@@ -45,7 +45,7 @@ function addBoba() {
 	if (config.folder) {
 		BobaParserTools.parseFolder(config.folder).then(handleParsedFiles).done();
 	} else if (config.files) {
-		throw 'Not implemented';
+        BobaParserTools.parseFiles(config.files).then(handleParsedFiles).done();
 	}
 }
 
