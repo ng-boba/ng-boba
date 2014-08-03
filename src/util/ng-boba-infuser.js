@@ -19,6 +19,24 @@ function loadConfig(url, callback) {
 	jsonfile.send(null);
 }
 
+function loadScript(url) {
+
+	// get some kind of XMLHttpRequest
+	var xhrObj = new XMLHttpRequest();
+
+	// open and send a synchronous request
+	xhrObj.open('GET', url, false);
+	xhrObj.send('');
+
+	// add the returned content to a newly created script tag
+	if (xhrObj.status == 200 && xhrObj.responseText) {
+		var se = document.createElement('script');
+		se.type = "text/javascript";
+		se.text = xhrObj.responseText;
+		document.getElementsByTagName('head')[0].appendChild(se);
+	}
+}
+
 function appendScript(url) {
 	var el = document.createElement('script');
 	el.src = url;
@@ -33,7 +51,7 @@ scripts.forEach(function(el) {
 		console.log('Found boba config!', c);
 		loadConfig(c, function(config) {
 			config.files.forEach(function(file) {
-				appendScript(file);
+				loadScript(file);
 			});
 		});
 	}
