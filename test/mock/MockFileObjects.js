@@ -102,5 +102,24 @@ function getDependencies(setName) {
 					]
 				}
 			];
+
+		// error case
+		case 'missingModuleDependencies':
+			return [
+				{
+					filePath: 'file1.js',
+					results: [
+						new NGModule('main', [
+							'missingModule'
+						])
+					]
+				},
+				{
+					filePath: 'file2.js',
+					results: [
+						new NGComponent('main', NGComponentType.DIRECTIVE, 'awesomeDirective')
+					]
+				}
+			];
 	}
 }

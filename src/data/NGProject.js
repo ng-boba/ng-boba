@@ -87,7 +87,7 @@ NGProject.prototype = {
 			var depModuleName = rootModule.dependencies[i];
 			var depModule = this.modules[depModuleName];
 			if (!depModule) {
-				console.error('Missing module:', moduleName);
+				console.error('Missing module:', depModuleName);
 				throw 'Missing module';
 			}
 			traverseModule(depModule, files);

@@ -67,4 +67,11 @@ describe('NGProject', function() {
 		}).toThrow('Missing module definition');
 	});
 
+	it('throws error if module dependencies are missing', function() {
+		var deps = MockFileObjects.getDependencies('missingModuleDependencies');
+		applyDeps(p, deps);
+		expect(function() {
+			var files = p.getBundleFiles('main');
+		}).toThrow('Missing module');
+	});
 });
