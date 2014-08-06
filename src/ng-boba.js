@@ -12,5 +12,7 @@ fs.readFile(file, 'utf8', function (err, data) {
         return;
     }
     config = JSON.parse(data);
-    ngBoba(config);
+    ngBoba(config).then(function(files) {
+        console.log(files);
+    }).done();
 });

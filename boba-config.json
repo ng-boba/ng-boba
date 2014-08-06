@@ -7,5 +7,5 @@
         "jModule"
     ],
     "xfolder": "test/project",
-    "files": ["test/project/jModule.js", "test/project/dep0.js", "test/project/dep1.js"]
+    "files": ["test/project/lModule.js", "test/project/kModule.js", "test/project/jModule.js", "test/project/dep0.js", "test/project/dep1.js"]
 }

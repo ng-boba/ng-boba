@@ -1,5 +1,6 @@
 var BobaParserTools = require('./parser/BobaParserTools');
 var NGProject = require('./data/NGProject');
+var $q = require('q');
 
 module.exports = addBoba;
 
@@ -26,15 +27,22 @@ function addBoba(config) {
         // TODO: validate that the output file is empty
     }
 
+    var deferred = $q.defer();
     if (config.folder) {
-        return BobaParserTools.parseFolder(config.folder).then(handleParsedFiles);
+        BobaParserTools.parseFolder(config.folder).then(function(result) {
+            handleParsedFiles(config, result, deferred);
+        });
+        return deferred.promise;
     } else if (config.files) {
-        return BobaParserTools.parseFiles(config.files).then(handleParsedFiles);
+        BobaParserTools.parseFiles(config.files).then(function(result){
+            handleParsedFiles(config, result, deferred);
+        });
+        return deferred.promise;
     } else {
         throw "Nothing to do";
     }
 
-    function handleParsedFiles(parsedFiles) {
+    function handleParsedFiles(config, parsedFiles, deferred) {
         var project = new NGProject();
         parsedFiles.forEach(function (fileObject) {
             project.addFileComponents(fileObject.filePath, fileObject.results);
@@ -47,10 +55,6 @@ function addBoba(config) {
         }
 
         var files = project.getBundleFiles(config.modules[0]);
-        outputFiles(files);
-    }
-
-    function outputFiles(files) {
         var s = JSON.stringify(formatOutput(files));
 
         if (config.output) {
@@ -63,9 +67,7 @@ function addBoba(config) {
             });
             return;
         }
-
-        // simple output
-        console.log(files);
+        deferred.resolve(files);
     }
 
     /**
