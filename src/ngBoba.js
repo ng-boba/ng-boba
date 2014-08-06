@@ -1,6 +1,6 @@
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require('fs');
-var ngBoba = require('./ng-boba-main');
+var ngBoba = require('./ngBobaMain');
 
 var file = argv.config ? argv.config : 'boba-config.json';
 
