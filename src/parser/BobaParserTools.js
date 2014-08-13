@@ -16,7 +16,7 @@ module.exports = {
  * @param {String} filePath
  * @returns {q.promise} fileObject
  */
-function parseFile(filePath) {
+function parseFile(filePath, moduleFormat) {
 	var deferred = $q.defer();
 	var filePath = filePath;
 	isFile(filePath).then(function() {
@@ -27,7 +27,7 @@ function parseFile(filePath) {
 			}
 
 			// now that we have the codes
-			var ngObject = NGDependencyParser.parseCode(data);
+			var ngObject = NGDependencyParser.parseCode(data, moduleFormat);
 			var fileObject = {
 				filePath: filePath,
 				results: ngObject
@@ -45,12 +45,12 @@ function parseFile(filePath) {
  * @param {Array} filePaths
  * @returns {q.promise} fileObject
  */
-function parseFiles(filePaths) {
+function parseFiles(filePaths, moduleFormat) {
 	var deferred = $q.defer();
 	var fileObjects = [];
 	var results = [];
 	filePaths.forEach(function(filePath) {
-		var result = parseFile(filePath).then(function(fileObject) {
+		var result = parseFile(filePath, moduleFormat).then(function(fileObject) {
 			if (fileObject) {
 				fileObjects.push(fileObject);
 			}
@@ -89,7 +89,7 @@ function isFile(filePath) {
  * @param {String} directoryPath
  * @returns {q.promise} fileObjects[]
  */
-function parseFolder(directoryPath) {
+function parseFolder(directoryPath, moduleFormat) {
 	var deferred = $q.defer();
 	var directoryPath = directoryPath.substr(-1) == '/' ? directoryPath : directoryPath + '/';
 	var fileObjects = [];
@@ -101,7 +101,7 @@ function parseFolder(directoryPath) {
 		var results = [];
 		for (var i = 0, iM = files.length; i < iM; i++) {
 			var filePath = directoryPath + files[i];
-			var result = parseFile(filePath).then(function(fileObject) {
+			var result = parseFile(filePath, moduleFormat).then(function(fileObject) {
 				if (fileObject) {
 					fileObjects.push(fileObject);
 				}

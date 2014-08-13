@@ -26,15 +26,18 @@ function addBoba(config) {
 
         // TODO: validate that the output file is empty
     }
+    if (!config.moduleFormat) {
+        throw ('Specify how your angular modules are defined. Options: "anonymous" or "array"');
+    }
 
     var deferred = $q.defer();
     if (config.folder) {
-        BobaParserTools.parseFolder(config.folder).then(function(result) {
+        BobaParserTools.parseFolder(config.folder, config.moduleFormat).then(function(result) {
             handleParsedFiles(config, result, deferred);
         });
         return deferred.promise;
     } else if (config.files) {
-        BobaParserTools.parseFiles(config.files).then(function(result){
+        BobaParserTools.parseFiles(config.files, config.moduleFormat).then(function(result){
             handleParsedFiles(config, result, deferred);
         });
         return deferred.promise;
