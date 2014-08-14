@@ -10,7 +10,7 @@
     "angular": "*",
     "bower": "*",
     "q": "*",
-    "underscore": "*",
+    "underscore": "*"
   },
   "devDependencies": {
 	"minimist": "*",

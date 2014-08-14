@@ -20,18 +20,20 @@ function parseCode(code, moduleFormat) {
 	var parseModuleRegex = '\\s*module\\([\'|"]([^)]+)[\'|"]\\)',
 		parseTypeRegex = '\\s*\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
 		parseNameRegex = '\\s*[\'|"]([^\'"]+)[\'|"]',
-        parseDependenciesRegexArrayNotation = '\\,\\s*\\[([^[]*)\\,\\s*function',
+        parseDependenciesRegexArrayNotation = ',\\s*\\[([^\\[]*)\\,\\s*function',
 		parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
 
+    var objectsRegex;
     if (moduleFormat == "array") {
-        var objectsRegex = new RegExp(
+        objectsRegex = new RegExp(
                 parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegexArrayNotation, 'g'
         );
     } else {
-        var objectsRegex = new RegExp(
+        objectsRegex = new RegExp(
                 parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
         );
     }
+
 	var matches;
 	var parsedObjects = parseModuleCode(code);
 	while ((matches = objectsRegex.exec(code)) !== null) {
