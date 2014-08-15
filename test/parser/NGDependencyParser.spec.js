@@ -54,7 +54,7 @@ describe('NGDependencyParser', function() {
 
 
     registerTestCases("anonymous");
-//    registerTestCases("array");
+    registerTestCases("array");
 
     function registerTestCases(moduleFormat) {
 
@@ -172,35 +172,49 @@ describe('NGDependencyParser', function() {
             });
         });
 
-        it('parses definitions with whitespace', function () {
-            parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
-                expect(parsedObjects.length).toEqual(4);
+        if (moduleFormat == "anonymous") {
+            it('parses definitions with whitespace', function () {
+                parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
+                    expect(parsedObjects.length).toEqual(4);
 
-                var o = parsedObjects[0];
-                expect(o.module).toEqual('test1');
-                expect(o.type).toEqual('controller');
-                expect(o.name).toEqual('TestController');
-                validateDependencies(o, 0);
+                    var o = parsedObjects[0];
+                    expect(o.module).toEqual('test1');
+                    expect(o.type).toEqual('controller');
+                    expect(o.name).toEqual('TestController');
+                    validateDependencies(o, 0);
 
-                o = parsedObjects[1];
-                expect(o.module).toEqual('test2');
-                expect(o.type).toEqual('controller');
-                expect(o.name).toEqual('TestController');
-                validateDependencies(o, 0);
+                    o = parsedObjects[1];
+                    expect(o.module).toEqual('test2');
+                    expect(o.type).toEqual('controller');
+                    expect(o.name).toEqual('TestController');
+                    validateDependencies(o, 0);
 
-                o = parsedObjects[2];
-                expect(o.module).toEqual('test3');
-                expect(o.type).toEqual('controller');
-                expect(o.name).toEqual('TestController');
-                validateDependencies(o, 0);
+                    o = parsedObjects[2];
+                    expect(o.module).toEqual('test3');
+                    expect(o.type).toEqual('controller');
+                    expect(o.name).toEqual('TestController');
+                    validateDependencies(o, 0);
 
-                o = parsedObjects[3];
-                expect(o.module).toEqual('test4');
-                expect(o.type).toEqual('controller');
-                expect(o.name).toEqual('TestController');
-                validateDependencies(o, 4);
+                    o = parsedObjects[3];
+                    expect(o.module).toEqual('test4');
+                    expect(o.type).toEqual('controller');
+                    expect(o.name).toEqual('TestController');
+                    validateDependencies(o, 4);
+                });
             });
-        });
+        } else {
+            it('parses definitions with whitespace', function () {
+                parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
+
+                    expect(parsedObjects.length).toEqual(1);
+                    var o = parsedObjects[0];
+                    expect(o.module).toEqual('test4');
+                    expect(o.type).toEqual('controller');
+                    expect(o.name).toEqual('TestController');
+                    validateDependencies(o, 4);
+                });
+            });
+        }
     }
 
 });

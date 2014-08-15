@@ -24,16 +24,19 @@ function parseCode(code, moduleFormat) {
 		parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
 
     var objectsRegex;
-    if (moduleFormat == "array") {
-        objectsRegex = new RegExp(
-                parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegexArrayNotation, 'g'
-        );
-    } else {
-        objectsRegex = new RegExp(
-                parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
-        );
+    try {
+        if (moduleFormat == "array") {
+            objectsRegex = new RegExp(
+                    parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegexArrayNotation, 'g'
+            );
+        } else {
+            objectsRegex = new RegExp(
+                    parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
+            );
+        }
+    } catch(err) {
+        console.log(err);
     }
-
 	var matches;
 	var parsedObjects = parseModuleCode(code);
 	while ((matches = objectsRegex.exec(code)) !== null) {
@@ -41,7 +44,7 @@ function parseCode(code, moduleFormat) {
 			matches[1],
 			matches[2],
 			matches[3],
-			parseDependencies(matches[4])
+			parseDependencies(matches[4], moduleFormat == "array")
 		);
 		parsedObjects.push(o);
 	}
