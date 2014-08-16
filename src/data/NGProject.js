@@ -80,9 +80,10 @@ NGProject.prototype = {
 	/**
 	 * Retrieves the dependencies required for a file
 	 * @param {String} moduleName
+	 * @param {Array} ignoreMissingModules (optional) - if provided, these modules will not generate missing errors
 	 * @returns {String[]}
 	 */
-	getBundleFiles: function(moduleName) {
+	getBundleFiles: function(moduleName, ignoreMissingModules) {
 		var rootModule = this.modules[moduleName];
 		if (!rootModule) {
 			console.error('Missing module:', moduleName);
@@ -90,11 +91,20 @@ NGProject.prototype = {
 		}
 		var files = [];
 
+		// convert missing modules to hash for quick lookup
+		var ignoreModules = {};
+		(ignoreMissingModules || []).forEach(function(name) {
+			ignoreModules[name] = true;
+		});
+
 		// trace all the module dependencies
 		for (var i = 0; i < rootModule.dependencies.length; i++) {
 			var depModuleName = rootModule.dependencies[i];
 			var depModule = this.modules[depModuleName];
 			if (!depModule) {
+				if (ignoreModules[depModuleName]) {
+					continue;
+				}
 				console.error('Missing module:', depModuleName);
 				throw 'Missing module';
 			}

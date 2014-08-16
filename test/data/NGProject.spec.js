@@ -59,6 +59,14 @@ describe('NGProject', function() {
 		}).toThrow('Missing module');
 	});
 
+	it('ignores error if module dependency is missing & in ignore list', function() {
+		var deps = MockFileObjects.getDependencies('missingModule');
+		applyDeps(p, deps);
+		expect(function() {
+			var files = p.getBundleFiles('main', ['missingModule']);
+		}).not.toThrow('Missing module');
+	});
+
 	it('throws error if module definition is missing', function() {
 		var deps = MockFileObjects.getDependencies('missingModuleDefinition');
 		applyDeps(p, deps);
