@@ -96,7 +96,9 @@ function addBoba(config) {
                     return;
                 }
             });
-        }
+        } else {
+			console.log(output);
+		}
         deferred.resolve(output);
     }
 

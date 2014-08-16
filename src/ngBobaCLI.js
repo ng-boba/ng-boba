@@ -5,13 +5,13 @@ var ngBoba = require('./ngBoba');
 if (argv.config) {
 
 	// stores all the configuration for ng-boba
-	var config = (argv.config === true) ? 'ng-boba.json' : argv.config;
-	fs.readFile(file, 'utf8', function (err, data) {
+	var configFile = (argv.config === true) ? 'ng-boba.json' : argv.config;
+	fs.readFile(configFile, 'utf8', function (err, data) {
 		if (err) {
 			console.log('Error: ' + err);
 			return;
 		}
-		config = JSON.parse(data);
+		var config = JSON.parse(data);
 		ngBoba(config).done();
 	});
 } else {
