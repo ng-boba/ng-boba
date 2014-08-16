@@ -89,7 +89,6 @@ NGProject.prototype = {
 			console.error('Missing module:', moduleName);
 			throw 'Missing module';
 		}
-		var files = [];
 
 		// convert missing modules to hash for quick lookup
 		var ignoreModules = {};
@@ -97,20 +96,8 @@ NGProject.prototype = {
 			ignoreModules[name] = true;
 		});
 
-		// trace all the module dependencies
-		for (var i = 0; i < rootModule.dependencies.length; i++) {
-			var depModuleName = rootModule.dependencies[i];
-			var depModule = this.modules[depModuleName];
-			if (!depModule) {
-				if (ignoreModules[depModuleName]) {
-					continue;
-				}
-				console.error('Missing module:', depModuleName);
-				throw 'Missing module';
-			}
-			traverseModule(depModule, files);
-		}
-		traverseModule(rootModule, files);
+		var files = [];
+		traverseModule(this, rootModule, ignoreModules, files);
 
 		// include base dependencies
 		files.unshift.apply(files, this.baseDependencies);
@@ -119,7 +106,21 @@ NGProject.prototype = {
 	}
 };
 
-function traverseModule(ngModule, files) {
+function traverseModule(project, ngModule, ignoreModules, files) {
+
+	// trace all the module dependencies
+	for (var i = 0; i < ngModule.dependencies.length; i++) {
+		var depModuleName = ngModule.dependencies[i];
+		var depModule = project.modules[depModuleName];
+		if (!depModule) {
+			if (ignoreModules[depModuleName]) {
+				continue;
+			}
+			console.error('Missing module:', depModuleName);
+			throw 'Missing module';
+		}
+		traverseModule(project, depModule, ignoreModules, files);
+	}
 
 	// TODO: include additional rules for config & provider, etc
 	// include the module before dependencies

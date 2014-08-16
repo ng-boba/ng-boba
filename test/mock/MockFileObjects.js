@@ -9,8 +9,6 @@ module.exports = {
 
 function getDependencies(setName) {
 	switch (setName) {
-
-		// one to one dependencies
 		default:
 		case 'basicProject':
 			return [
@@ -67,6 +65,44 @@ function getDependencies(setName) {
 					filePath: 'file4.js',
 					results: [
 						new NGModule('moduleIncluded')
+					]
+				}
+			];
+
+		case 'deepTree':
+			return [
+				{
+					filePath: 'file1.js',
+					results: [
+						new NGModule('main', [
+							'depModule1'
+						]),
+						new NGModule('depModule1', ['depModule2']),
+						new NGModule('depModule2', [])
+					]
+				},
+				{
+					filePath: 'file2.js',
+					results: [
+						new NGComponent('depModule2', NGComponentType.DIRECTIVE, 'child2', ['child3'])
+					]
+				},
+				{
+					filePath: 'file3.js',
+					results: [
+						new NGComponent('depModule2', NGComponentType.DIRECTIVE, 'child3', ['child4'])
+					]
+				},
+				{
+					filePath: 'file4.js',
+					results: [
+						new NGComponent('depModule2', NGComponentType.DIRECTIVE, 'child4', ['child5'])
+					]
+				},
+				{
+					filePath: 'file5.js',
+					results: [
+						new NGComponent('depModule2', NGComponentType.DIRECTIVE, 'child5')
 					]
 				}
 			];
