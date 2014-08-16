@@ -7,19 +7,19 @@ module.exports = addBoba;
 function addBoba(config) {
 
     if (!config) {
-        throw ('Boba needs a config to run.');
+        throw 'Boba needs a config to run.';
     }
 
     if (!config.folder && !config.files) {
-        throw ('Add files or folder option to your config');
+        throw 'Add files or folder option to your config';
     }
 
     if (config.folder && config.files) {
-        throw ('Both files and folder options cannot be specified.  Choose one.');
+        console.warn('Looks like you specified both files and folder options. Folder takes priority.');
     }
 
     if (!config.modules || config.modules.length == 0) {
-        throw ('Specify one or more angular modules.');
+        throw 'Specify one or more angular modules.';
     }
 
     if (config.output) {
@@ -47,12 +47,12 @@ function addBoba(config) {
             handleParsedFiles(config, result, deferred);
         });
 
-    } else if (config.files) {
+    } else {
+
+		// use files
         BobaParserTools.parseFiles(config.files, moduleFormat).then(function(result){
             handleParsedFiles(config, result, deferred);
         });
-    } else {
-        throw "Nothing to do";
     }
 	return deferred.promise;
 
@@ -75,19 +75,18 @@ function addBoba(config) {
         }
 
         var files = project.getBundleFiles(config.modules[0]);
-        var s = JSON.stringify(formatOutput(files));
-
+		var output = formatOutput(files);
         if (config.output) {
 
             // write the file list to file
+			var s = JSON.stringify(output);
             fs.writeFile(config.output, s, function (err) {
                 if (err) {
                     return;
                 }
             });
-            return;
         }
-        deferred.resolve(files);
+        deferred.resolve(output);
     }
 
     /**
