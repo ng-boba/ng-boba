@@ -74,7 +74,18 @@ function addBoba(config) {
             });
         }
 
-        var files = project.getBundleFiles(config.modules[0]);
+		var files;
+		try {
+			files = project.getBundleFiles(config.modules[0]);
+		} catch(e) {
+			if (config.verbose) {
+				console.log('Registered modules:', project.getModuleNames());
+			}
+
+			// rethrow
+			throw e;
+		}
+
 		var output = formatOutput(files);
         if (config.output) {
 

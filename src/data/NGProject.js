@@ -70,6 +70,14 @@ NGProject.prototype = {
 	},
 
 	/**
+	 * Simple getter to return all the module names
+	 * @returns {Array}
+	 */
+	getModuleNames: function() {
+		return Object.keys(this.modules);
+	},
+
+	/**
 	 * Retrieves the dependencies required for a file
 	 * @param {String} moduleName
 	 * @returns {String[]}

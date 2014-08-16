@@ -17,14 +17,13 @@ if (argv.config) {
 } else {
 
 	// build up the configuration via options
-	var config = {};
-
-	config.modules = argv.modules;
-	config.output = argv.output;
-	config.files = argv.files;
-	config.folder = argv.folder;
-//	config.debug = argv.debug;
-
+	var config = {
+		modules: argv.modules,
+		output: argv.output,
+		files: argv.files,
+		folder: argv.folder,
+		verbose: argv.verbose
+	};
 	ngBoba(config).done();
 }
 
