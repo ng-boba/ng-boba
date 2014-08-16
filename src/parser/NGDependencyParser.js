@@ -1,11 +1,11 @@
 /**
  * Handles the duties of parsing JavaScript code
  *
- * @note This implementation uses regular expression. Be gentle.
- * @TODO: use a real ECMAScript parser
+ * @note This implementation uses regular expression.
  */
 var NGModule = require('./../data/NGModule');
 var NGComponent = require('./../data/NGComponent');
+var NGModuleFormat = require('./../data/NGModuleFormat');
 
 module.exports = {
 	parseCode: parseCode
@@ -14,6 +14,7 @@ module.exports = {
 /**
  * Main entry for parsing JavaScript codes
  * @param {String} code
+ * @param {Enum} moduleFormat (optional) - Defaults to anonymous format parsing
  * @returns {NGObjectDetails[]}
  */
 function parseCode(code, moduleFormat) {
@@ -24,19 +25,21 @@ function parseCode(code, moduleFormat) {
 		parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
 
     var objectsRegex;
-    try {
-        if (moduleFormat == "array") {
-            objectsRegex = new RegExp(
-                    parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegexArrayNotation, 'g'
-            );
-        } else {
-            objectsRegex = new RegExp(
-                    parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
-            );
-        }
-    } catch(err) {
-        console.log(err);
-    }
+	switch (moduleFormat) {
+		default:
+		case NGModuleFormat.ANONYMOUS:
+			objectsRegex = new RegExp(
+					parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegex, 'g'
+			);
+			break;
+		case NGModuleFormat.ARRAY:
+			objectsRegex = new RegExp(
+					parseModuleRegex + parseTypeRegex + parseNameRegex + parseDependenciesRegexArrayNotation, 'g'
+			);
+			break;
+	}
+
+	// apply the regex
 	var matches;
 	var parsedObjects = parseModuleCode(code);
 	while ((matches = objectsRegex.exec(code)) !== null) {
@@ -44,7 +47,7 @@ function parseCode(code, moduleFormat) {
 			matches[1],
 			matches[2],
 			matches[3],
-			parseDependencies(matches[4], moduleFormat == "array")
+			parseDependencies(matches[4], moduleFormat == NGModuleFormat.ARRAY)
 		);
 		parsedObjects.push(o);
 	}

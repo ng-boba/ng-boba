@@ -1,6 +1,7 @@
 
 var ParserTestConfig = require('./ParserTestConfig');
 var DependencyParser = require('../../src/parser/NGDependencyParser');
+var NGModuleFormat = require('../../src/data/NGModuleFormat');
 var BobaParserTools = require('../../src/parser/BobaParserTools');
 
 describe('NGDependencyParser', function() {
@@ -13,15 +14,20 @@ describe('NGDependencyParser', function() {
     /**
      * Testing helper to simplify test case creation
      * @param {String} name - name of the test case file, i.e. single-service
+	 * @param {Enum} moduleFormat - specifies the parser to run on the code
      * @param {Function} onParse - callback to invoke after the file is parsed
      */
     function parseTestCase(name, moduleFormat, onParse) {
-
-        var path = ParserTestConfig.TEST_CASE_DIRECTORY + name +'.js';
-        if (moduleFormat == "array") {
-            path = ParserTestConfig.TEST_CASE_ARRAY_DIRECTORY + name +'.js';
-        }
-
+		var path;
+		switch (moduleFormat) {
+			default:
+			case NGModuleFormat.ANONYMOUS:
+				path = ParserTestConfig.TEST_CASE_DIRECTORY + name +'.js';
+				break;
+			case NGModuleFormat.ARRAY:
+				path = ParserTestConfig.TEST_CASE_ARRAY_DIRECTORY + name +'.js';
+				break;
+		}
         var $promise = BobaParserTools.parseFile(path, moduleFormat);
         var parsedObjects;
         $promise.then(function(fileObject) {
@@ -52,13 +58,11 @@ describe('NGDependencyParser', function() {
         }
     }
 
-
-    registerTestCases("anonymous");
-    registerTestCases("array");
+	// create the test cases
+    registerTestCases(NGModuleFormat.ANONYMOUS);
+    registerTestCases(NGModuleFormat.ARRAY);
 
     function registerTestCases(moduleFormat) {
-
-
         it('fails if file is missing', function () {
             var $promise = BobaParserTools.parseFile('xxxxxxWeeee.dontexist.js');
             waitsFor(function () {
@@ -172,49 +176,52 @@ describe('NGDependencyParser', function() {
             });
         });
 
-        if (moduleFormat == "anonymous") {
-            it('parses definitions with whitespace', function () {
-                parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
-                    expect(parsedObjects.length).toEqual(4);
+		switch (moduleFormat) {
+			case NGModuleFormat.ANONYMOUS:
+				it('parses definitions with whitespace', function () {
+					parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
+						expect(parsedObjects.length).toEqual(4);
 
-                    var o = parsedObjects[0];
-                    expect(o.module).toEqual('test1');
-                    expect(o.type).toEqual('controller');
-                    expect(o.name).toEqual('TestController');
-                    validateDependencies(o, 0);
+						var o = parsedObjects[0];
+						expect(o.module).toEqual('test1');
+						expect(o.type).toEqual('controller');
+						expect(o.name).toEqual('TestController');
+						validateDependencies(o, 0);
 
-                    o = parsedObjects[1];
-                    expect(o.module).toEqual('test2');
-                    expect(o.type).toEqual('controller');
-                    expect(o.name).toEqual('TestController');
-                    validateDependencies(o, 0);
+						o = parsedObjects[1];
+						expect(o.module).toEqual('test2');
+						expect(o.type).toEqual('controller');
+						expect(o.name).toEqual('TestController');
+						validateDependencies(o, 0);
 
-                    o = parsedObjects[2];
-                    expect(o.module).toEqual('test3');
-                    expect(o.type).toEqual('controller');
-                    expect(o.name).toEqual('TestController');
-                    validateDependencies(o, 0);
+						o = parsedObjects[2];
+						expect(o.module).toEqual('test3');
+						expect(o.type).toEqual('controller');
+						expect(o.name).toEqual('TestController');
+						validateDependencies(o, 0);
 
-                    o = parsedObjects[3];
-                    expect(o.module).toEqual('test4');
-                    expect(o.type).toEqual('controller');
-                    expect(o.name).toEqual('TestController');
-                    validateDependencies(o, 4);
-                });
-            });
-        } else {
-            it('parses definitions with whitespace', function () {
-                parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
+						o = parsedObjects[3];
+						expect(o.module).toEqual('test4');
+						expect(o.type).toEqual('controller');
+						expect(o.name).toEqual('TestController');
+						validateDependencies(o, 4);
+					});
+				});
+				break;
 
-                    expect(parsedObjects.length).toEqual(1);
-                    var o = parsedObjects[0];
-                    expect(o.module).toEqual('test4');
-                    expect(o.type).toEqual('controller');
-                    expect(o.name).toEqual('TestController');
-                    validateDependencies(o, 4);
-                });
-            });
-        }
+			case NGModuleFormat.ARRAY:
+				it('parses definitions with whitespace', function () {
+					parseTestCase('whitespace', moduleFormat, function (parsedObjects) {
+						expect(parsedObjects.length).toEqual(1);
+						var o = parsedObjects[0];
+						expect(o.module).toEqual('test4');
+						expect(o.type).toEqual('controller');
+						expect(o.name).toEqual('TestController');
+						validateDependencies(o, 4);
+					});
+				});
+				break;
+		}
     }
 
 });
