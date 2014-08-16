@@ -76,7 +76,7 @@ function addBoba(config) {
 
 		var files;
 		try {
-			files = project.getBundleFiles(config.modules[0]);
+			files = project.getBundleFiles(config.modules[0], config.ignoreModules);
 		} catch(e) {
 			if (config.verbose) {
 				console.log('Registered modules:', project.getModuleNames());

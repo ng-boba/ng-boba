@@ -18,11 +18,18 @@ if (argv.config) {
 
 	// build up the configuration via options
 	var config = {
+
+		// TODO: convert to array
 		modules: argv.modules,
 		output: argv.output,
+
+		// TODO: convert to array
 		files: argv.files,
 		folder: argv.folder,
-		verbose: argv.verbose
+		verbose: argv.verbose,
+
+		// TODO: convert to array
+		ignoreModules: (argv.ignoreModules || '').split(',')
 	};
 	ngBoba(config).done();
 }
