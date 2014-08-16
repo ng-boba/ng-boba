@@ -46,16 +46,22 @@ function addBoba(config) {
         BobaParserTools.parseFolder(config.folder, moduleFormat).then(function(result) {
             handleParsedFiles(config, result, deferred);
         });
-        return deferred.promise;
+
     } else if (config.files) {
         BobaParserTools.parseFiles(config.files, moduleFormat).then(function(result){
             handleParsedFiles(config, result, deferred);
         });
-        return deferred.promise;
     } else {
         throw "Nothing to do";
     }
+	return deferred.promise;
 
+	/**
+	 * Assembles a NGProject from parsed details
+	 * @param config
+	 * @param {Array} parsedFiles
+	 * @param {q.promise} deferred
+	 */
     function handleParsedFiles(config, parsedFiles, deferred) {
         var project = new NGProject();
         parsedFiles.forEach(function (fileObject) {
