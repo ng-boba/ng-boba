@@ -8,7 +8,9 @@
         "jModule"
     ],
     "moduleFormat": "anonymous",
-
+    "ignoreModules": [
+      "mModule"
+    ],
 	"xfolder": "test/project",
     "files": [
 		"test/project/lModule.js",
