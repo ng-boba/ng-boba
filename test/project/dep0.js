@@ -1,3 +1,3 @@
-angular.module('jModule').controller('dep0', function() {
+angular.module('jModule').controller('dep0', function () {
 
 });

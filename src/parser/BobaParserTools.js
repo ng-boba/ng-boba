@@ -6,9 +6,9 @@ var $q = require('q');
 var NGDependencyParser = require('./NGDependencyParser');
 
 module.exports = {
-	parseFile: parseFile,
-    parseFiles: parseFiles,
-	parseFolder: parseFolder
+  parseFile: parseFile,
+  parseFiles: parseFiles,
+  parseFolder: parseFolder
 };
 
 /**
@@ -17,27 +17,27 @@ module.exports = {
  * @returns {q.promise} fileObject
  */
 function parseFile(filePath, moduleFormat) {
-	var deferred = $q.defer();
-	var filePath = filePath;
-	isFile(filePath).then(function() {
-		fs.readFile(filePath, 'utf8', function (err, data) {
-			if (err) {
-				deferred.reject(err);
-				return;
-			}
+  var deferred = $q.defer();
+  var filePath = filePath;
+  isFile(filePath).then(function () {
+    fs.readFile(filePath, 'utf8', function (err, data) {
+      if (err) {
+        deferred.reject(err);
+        return;
+      }
 
-			// now that we have the codes
-			var ngObject = NGDependencyParser.parseCode(data, moduleFormat);
-			var fileObject = {
-				filePath: filePath,
-				results: ngObject
-			};
-			deferred.resolve(fileObject);
-		});
-	}).catch(function() {
-		deferred.reject();
-	});
-	return deferred.promise;
+      // now that we have the codes
+      var ngObject = NGDependencyParser.parseCode(data, moduleFormat);
+      var fileObject = {
+        filePath: filePath,
+        results: ngObject
+      };
+      deferred.resolve(fileObject);
+    });
+  }).catch(function () {
+    deferred.reject();
+  });
+  return deferred.promise;
 }
 
 /**
@@ -46,21 +46,21 @@ function parseFile(filePath, moduleFormat) {
  * @returns {q.promise} fileObject
  */
 function parseFiles(filePaths, moduleFormat) {
-	var deferred = $q.defer();
-	var fileObjects = [];
-	var results = [];
-	filePaths.forEach(function(filePath) {
-		var result = parseFile(filePath, moduleFormat).then(function(fileObject) {
-			if (fileObject) {
-				fileObjects.push(fileObject);
-			}
-		});
-		results.push(result);
-	});
-	$q.allSettled(results).finally(function() {
-		deferred.resolve(fileObjects);
-	});
-	return deferred.promise;
+  var deferred = $q.defer();
+  var fileObjects = [];
+  var results = [];
+  filePaths.forEach(function (filePath) {
+    var result = parseFile(filePath, moduleFormat).then(function (fileObject) {
+      if (fileObject) {
+        fileObjects.push(fileObject);
+      }
+    });
+    results.push(result);
+  });
+  $q.allSettled(results).finally(function () {
+    deferred.resolve(fileObjects);
+  });
+  return deferred.promise;
 }
 
 /**
@@ -69,19 +69,19 @@ function parseFiles(filePaths, moduleFormat) {
  * @returns {q.promise}
  */
 function isFile(filePath) {
-	var deferred = $q.defer();
-	fs.stat(filePath, function(err, stat) {
-		if (err || !stat) {
-			deferred.reject();
-			return;
-		}
-		if (stat.isDirectory()) {
-			deferred.reject();
-		} else {
-			deferred.resolve();
-		}
-	});
-	return deferred.promise;
+  var deferred = $q.defer();
+  fs.stat(filePath, function (err, stat) {
+    if (err || !stat) {
+      deferred.reject();
+      return;
+    }
+    if (stat.isDirectory()) {
+      deferred.reject();
+    } else {
+      deferred.resolve();
+    }
+  });
+  return deferred.promise;
 }
 
 /**
@@ -90,27 +90,27 @@ function isFile(filePath) {
  * @returns {q.promise} fileObjects[]
  */
 function parseFolder(directoryPath, moduleFormat) {
-	var deferred = $q.defer();
-	var directoryPath = directoryPath.substr(-1) == '/' ? directoryPath : directoryPath + '/';
-	var fileObjects = [];
-	fs.readdir(directoryPath, function (err, files) {
-		if (err) {
-			deferred.reject(err);
-			return;
-		}
-		var results = [];
-		for (var i = 0, iM = files.length; i < iM; i++) {
-			var filePath = directoryPath + files[i];
-			var result = parseFile(filePath, moduleFormat).then(function(fileObject) {
-				if (fileObject) {
-					fileObjects.push(fileObject);
-				}
-			});
-			results.push(result);
-		}
-		$q.allSettled(results).finally(function() {
-			deferred.resolve(fileObjects);
-		});
-	});
-	return deferred.promise;
+  var deferred = $q.defer();
+  var directoryPath = directoryPath.substr(-1) == '/' ? directoryPath : directoryPath + '/';
+  var fileObjects = [];
+  fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+      deferred.reject(err);
+      return;
+    }
+    var results = [];
+    for (var i = 0, iM = files.length; i < iM; i++) {
+      var filePath = directoryPath + files[i];
+      var result = parseFile(filePath, moduleFormat).then(function (fileObject) {
+        if (fileObject) {
+          fileObjects.push(fileObject);
+        }
+      });
+      results.push(result);
+    }
+    $q.allSettled(results).finally(function () {
+      deferred.resolve(fileObjects);
+    });
+  });
+  return deferred.promise;
 }

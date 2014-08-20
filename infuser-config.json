@@ -1,11 +1,11 @@
 {
-    "dependencies": [
-        "src/jquery/jquery.js",
-        "src/jquery/jquery2.js"
-    ],
-    "modules": [
-        "jModule"
-    ],
-    "folder": "test/project",
-	"output": "bin/infuser.json"
+  "dependencies": [
+    "src/jquery/jquery.js",
+    "src/jquery/jquery2.js"
+  ],
+  "modules": [
+    "jModule"
+  ],
+  "folder": "test/project",
+  "output": "bin/infuser.json"
 }

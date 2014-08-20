@@ -18,10 +18,10 @@
   "dependencies": {
 
   },
-  "devDependencies" : {
-	  "jquery": "*",
-	  "bootstrap": "*",
-	  "underscore": "*",
-	  "backbone": "*"
+  "devDependencies": {
+    "jquery": "*",
+    "bootstrap": "*",
+    "underscore": "*",
+    "backbone": "*"
   }
 }

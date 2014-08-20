@@ -1,3 +1,3 @@
-angular.module('test').factory('testFactory', function(dep1, dep2) {
+angular.module('test').factory('testFactory', function (dep1, dep2) {
 
 });

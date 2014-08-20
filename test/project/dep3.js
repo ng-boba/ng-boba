@@ -1,3 +1,3 @@
-angular.module('jModule').factory('dep3', function() {
+angular.module('jModule').factory('dep3', function () {
 
 });

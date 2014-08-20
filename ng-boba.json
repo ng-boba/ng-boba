@@ -1,38 +1,38 @@
 {
-	"//1": "This is a sample configuration file",
+  "//1": "This is a sample configuration file",
 
-	"dependencies": [
+  "dependencies": [
     "src/jquery/jquery.js",
     "src/jquery/jquery2.js"
   ],
 
   "moduleFormat": "anonymous",
 
-	"modules": [
-        "jModule"
+  "modules": [
+    "jModule"
   ],
 
-	"ignoreModules": [
-      "mModule"
+  "ignoreModules": [
+    "mModule"
   ],
 
   "files": [
-		"test/project/lModule.js",
-		"test/project/kModule.js",
-		"test/project/jModule.js",
-		"test/project/dep0.js",
-		"test/project/dep1.js"
-	],
+    "test/project/lModule.js",
+    "test/project/kModule.js",
+    "test/project/jModule.js",
+    "test/project/dep0.js",
+    "test/project/dep1.js"
+  ],
 
-	"folder": "test/project",
+  "folder": "test/project",
 
-	"shims": {
-		"file/path.js": [
-			'moduleName',
-			'ControllerName'
-		],
-		"other/file.js": [
-			'directiveName'
-		]
-	}
+  "shims": {
+    "file/path.js": [
+      'moduleName',
+      'ControllerName'
+    ],
+    "other/file.js": [
+      'directiveName'
+    ]
+  }
 }

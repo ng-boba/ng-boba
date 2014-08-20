@@ -1,4 +1,3 @@
-
 var NGComponentType = require('./NGComponentType');
 var _ = require('underscore');
 
@@ -14,32 +13,32 @@ module.exports = NGComponent;
  * @constructor
  */
 function NGComponent(moduleName, type, name, dependencies) {
-	this.module = moduleName;
-	if (!NGComponentType[type.toUpperCase()]) {
-		console.error('Invalid component type', type);
-		throw 'Invalid component type';
-	}
-	this.type = type;
-	this.name = name;
-	if (dependencies && !_.isArray(dependencies)) {
-		console.error('Invalid component dependencies', dependencies);
-		throw 'Invalid component dependencies';
-	}
-	this.dependencies = dependencies || [];
+  this.module = moduleName;
+  if (!NGComponentType[type.toUpperCase()]) {
+    console.error('Invalid component type', type);
+    throw 'Invalid component type';
+  }
+  this.type = type;
+  this.name = name;
+  if (dependencies && !_.isArray(dependencies)) {
+    console.error('Invalid component dependencies', dependencies);
+    throw 'Invalid component dependencies';
+  }
+  this.dependencies = dependencies || [];
 }
 
 NGComponent.prototype = {
-	hasDependency: function(name) {
-		return _.any(this.dependencies, function(dep) {
-			return dep == name;
-		});
-	},
+  hasDependency: function (name) {
+    return _.any(this.dependencies, function (dep) {
+      return dep == name;
+    });
+  },
 
-	setFilePath: function(path) {
-		if (this.path && this.path != path) {
-			console.error('Duplicate component path', this.path, path);
-			throw 'Duplicate component path';
-		}
-		this.path = path;
-	}
+  setFilePath: function (path) {
+    if (this.path && this.path != path) {
+      console.error('Duplicate component path', this.path, path);
+      throw 'Duplicate component path';
+    }
+    this.path = path;
+  }
 };

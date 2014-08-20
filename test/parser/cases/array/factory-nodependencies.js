@@ -1,3 +1,3 @@
-angular.module('test').factory('testFactory', function() {
+angular.module('test').factory('testFactory', function () {
 
 });
