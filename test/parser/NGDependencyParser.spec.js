@@ -62,13 +62,12 @@ describe('NGDependencyParser', function () {
   registerTestCases(NGModuleFormat.ANONYMOUS);
   registerTestCases(NGModuleFormat.ARRAY);
 
-  iit('parses angular definitions', function () {
-    parseTestCase('../../../bower_components/angular/angular', NGModuleFormat.ANONYMOUS, function (parsedObjects) {
-      console.log('Parsed angular codes');
-      console.log(parsedObjects);
-    });
-  });
-
+//  iit('parses angular definitions', function () {
+//    parseTestCase('../../../bower_components/angular/angular', NGModuleFormat.ANONYMOUS, function (parsedObjects) {
+//      console.log('Parsed angular codes');
+//      console.log(parsedObjects);
+//    });
+//  });
 
   function registerTestCases(moduleFormat) {
     it('fails if file is missing', function () {
@@ -119,11 +118,17 @@ describe('NGDependencyParser', function () {
 
     it('parses factory definition', function () {
       parseTestCase('factory', moduleFormat, function (parsedObjects) {
-        expect(parsedObjects.length).toEqual(1);
+        expect(parsedObjects.length).toEqual(2);
         var o = parsedObjects[0];
         expect(o.module).toEqual('test');
         expect(o.type).toEqual('factory');
-        expect(o.name).toEqual('testFactory');
+        expect(o.name).toEqual('testFactory1');
+        validateDependencies(o, 2);
+
+        o = parsedObjects[1];
+        expect(o.module).toEqual('test');
+        expect(o.type).toEqual('factory');
+        expect(o.name).toEqual('testFactory2');
         validateDependencies(o, 2);
       });
     });

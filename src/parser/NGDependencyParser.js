@@ -21,8 +21,8 @@ function parseCode(code, moduleFormat) {
   var parseModuleRegex = '\\s*module\\([\'|"]([^)]+)[\'|"]\\)',
     parseTypeRegex = '\\s*\\.(decorator|constant|value|filter|directive|provider|service|factory|controller|animation|config|run)\\(',
     parseNameRegex = '\\s*[\'|"]([^\'"]+)[\'|"]',
-    parseDependenciesRegexArrayNotation = ',\\s*\\[([^\\[]*)\\,\\s*function',
-    parseDependenciesRegex = ',\\s*function\\(([^)]*)\\)';
+    parseDependenciesRegexArrayNotation = ',\\s*\\[([^\\[]*)\\s*,\\s*function',
+    parseDependenciesRegex = ',\\s*function\\s*\\(([^)]*)\\)';
 
   var objectsRegex;
   switch (moduleFormat) {
