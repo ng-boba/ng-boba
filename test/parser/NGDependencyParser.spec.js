@@ -21,13 +21,12 @@ describe('NGDependencyParser', function () {
     switch (moduleFormat) {
       default:
       case NGModuleFormat.ANONYMOUS:
-        path = ParserTestConfig.TEST_CASE_DIRECTORY + name + '.js';
+        path = ParserTestConfig.TEST_CASE_ANONYMOUS_DIRECTORY + name + '.js';
         break;
       case NGModuleFormat.ARRAY:
         path = ParserTestConfig.TEST_CASE_ARRAY_DIRECTORY + name + '.js';
         break;
     }
-    console.log('parsing', path);
     var $promise = BobaParserTools.parseFile(path, moduleFormat);
     var parsedObjects;
     $promise.then(function (fileObject) {
@@ -62,8 +61,9 @@ describe('NGDependencyParser', function () {
   registerTestCases(NGModuleFormat.ANONYMOUS);
   registerTestCases(NGModuleFormat.ARRAY);
 
+  // TODO: can we parse angular dependencies?
 //  iit('parses angular definitions', function () {
-//    parseTestCase('../../../bower_components/angular/angular', NGModuleFormat.ANONYMOUS, function (parsedObjects) {
+//    parseTestCase('../../../redist/angular-1.2.22/angular', NGModuleFormat.ANONYMOUS, function (parsedObjects) {
 //      console.log('Parsed angular codes');
 //      console.log(parsedObjects);
 //    });
