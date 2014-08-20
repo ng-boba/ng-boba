@@ -59,6 +59,17 @@ describe('NGProject', function () {
     expect(files[1]).toEqual('file2.js');
   });
 
+  it('includes children of children modules', function () {
+    var deps = MockFileObjects.getDependencies('deepTree2');
+    applyDeps(p, deps);
+    var files = p.getBundleFiles('main');
+    expect(files.length).toEqual(4);
+    expect(files[0]).toEqual('depModule5.js');
+    expect(files[1]).toEqual('depModule2.js');
+    expect(files[2]).toEqual('depModule3.js');
+    expect(files[3]).toEqual('depModule1.js');
+  });
+
   it('throws error if module dependency is missing', function () {
     var deps = MockFileObjects.getDependencies('missingModule');
     applyDeps(p, deps);

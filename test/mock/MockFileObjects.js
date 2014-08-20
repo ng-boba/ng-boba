@@ -106,6 +106,37 @@ function getDependencies(setName) {
         }
       ];
 
+    case 'deepTree2':
+      return [
+        {
+          filePath: 'depModule1.js',
+          results: [
+            new NGModule('main', [
+              'depModule1'
+            ]),
+            new NGModule('depModule1', ['depModule2', 'depModule3'])
+          ]
+        },
+        {
+          filePath: 'depModule2.js',
+          results: [
+            new NGModule('depModule2', ['depModule5'])
+          ]
+        },
+        {
+          filePath: 'depModule3.js',
+          results: [
+            new NGModule('depModule3', ['depModule5'])
+          ]
+        },
+        {
+          filePath: 'depModule5.js',
+          results: [
+            new NGModule('depModule5', [])
+          ]
+        }
+      ];
+
     // error case
     case 'missingModule':
       return [
