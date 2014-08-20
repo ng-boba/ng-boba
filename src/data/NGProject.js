@@ -57,6 +57,30 @@ NGProject.prototype = {
   },
 
   /**
+   * Patches in dependency information for files that cannot be parsed
+   * @param {String} filePath
+   * @param {Array} shimComponents
+   */
+  addFileShims: function(filePath, shimComponents) {
+    var components = [];
+    shimComponents.forEach(function(shimComponent) {
+      var component;
+      var moduleSeparator = shimComponent.indexOf('.');
+      if (moduleSeparator !== -1) {
+        var parts = shimComponent.split('.');
+
+        // TODO: how to handle shim component types... is it necessary?
+        component = new NGComponent(parts[0], NGComponentType.CONTROLLER, parts[1]);
+      } else {
+        component = new NGModule(shimComponent);
+      }
+      components.push(component);
+    });
+    this.addFileComponents(filePath, components);
+  },
+
+
+  /**
    * If filePath is provided, then it is assumed to be the file containing the module
    * @param name
    * @param filePath (optional)

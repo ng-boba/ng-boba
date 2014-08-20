@@ -1,20 +1,9 @@
 {
   "//1": "This is a sample configuration file",
 
-  "dependencies": [
-    "src/jquery/jquery.js",
-    "src/jquery/jquery2.js"
-  ],
-
   "moduleFormat": "anonymous",
 
-  "modules": [
-    "jModule"
-  ],
-
-  "ignoreModules": [
-    "mModule"
-  ],
+  "folder": "test/project",
 
   "files": [
     "test/project/lModule.js",
@@ -24,15 +13,27 @@
     "test/project/dep1.js"
   ],
 
-  "folder": "test/project",
+  "ignoreModules": [
+    "mModule"
+  ],
 
   "shims": {
     "file/path.js": [
-      'moduleName',
-      'ControllerName'
+      "moduleName",
+      "moduleName.ControllerName",
+      "moduleName.directiveName"
     ],
     "other/file.js": [
-      'directiveName'
+      "moduleName.directiveName2"
     ]
-  }
+  },
+
+  "dependencies": [
+    "src/jquery/jquery.js",
+    "src/jquery/jquery2.js"
+  ],
+
+  "modules": [
+    "jModule"
+  ]
 }

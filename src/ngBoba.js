@@ -43,15 +43,15 @@ function addBoba(config) {
 
   var deferred = $q.defer();
   if (config.folder) {
-    BobaParserTools.parseFolder(config.folder, moduleFormat).then(function (result) {
-      handleParsedFiles(config, result, deferred);
+    BobaParserTools.parseFolder(config.folder, moduleFormat).then(function(results) {
+      handleParsedFiles(config, results, deferred);
     });
 
   } else {
 
     // use files
-    BobaParserTools.parseFiles(config.files, moduleFormat).then(function (result) {
-      handleParsedFiles(config, result, deferred);
+    BobaParserTools.parseFiles(config.files, moduleFormat).then(function(results) {
+      handleParsedFiles(config, results, deferred);
     });
   }
   return deferred.promise;
@@ -71,6 +71,13 @@ function addBoba(config) {
     if (config.dependencies) {
       config.dependencies.forEach(function (dependency) {
         project.addBaseDependency(dependency);
+      });
+    }
+
+    if (config.shims) {
+      Object.keys(config.shims).forEach(function(filePath) {
+        var shimComponents = config.shims[filePath];
+        project.addFileShims(filePath, shimComponents);
       });
     }
 

@@ -33,6 +33,19 @@ describe('NGProject', function () {
     expect(moduleIncluded.getComponent('awesomeDirective')).toBeDefined();
   });
 
+  it('supports component shims', function () {
+    p.addFileShims('some/file.js', [
+      'main',
+      'main.controller',
+      'main.directive'
+    ]);
+    var main = p.getModule('main');
+    expect(Object.keys(main.components).length).toEqual(2);
+
+    var files = p.getBundleFiles('main');
+    expect(files.length).toEqual(1);
+  });
+
   it('generates file list without duplicates', function () {
     var deps = MockFileObjects.getDependencies();
     applyDeps(p, deps);
