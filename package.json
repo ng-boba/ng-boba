@@ -1,6 +1,7 @@
 {
   "name": "ng-boba",
   "version": "0.0.1",
+  "main": "./src/ngBobaMain.js",
   "description": "TBD",
   "repository": {
     "type": "git",
