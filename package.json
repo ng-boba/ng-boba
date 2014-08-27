@@ -1,19 +1,19 @@
 {
   "name": "ng-boba",
   "version": "0.0.1",
-  "description": "",
+  "description": "TBD",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jvreeland/ng-boba"
+    "url": "https://github.com/ng-boba/ng-boba"
   },
   "dependencies": {
-    "angular": "*",
-    "bower": "*",
+    "minimist": "*",
     "q": "*",
     "underscore": "*"
   },
   "devDependencies": {
-    "minimist": "*",
+    "bower": "*",
+    "angular": "*",
     "karma": "*",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
