@@ -1,3 +1,4 @@
+var NGBobaLogger = require('./util/NGBobaLogger');
 var BobaParserTools = require('./parser/BobaParserTools');
 var NGProject = require('./data/NGProject');
 var $q = require('q');
@@ -25,6 +26,11 @@ function addBoba(config) {
   if (config.output) {
 
     // TODO: validate that the output file is empty
+  }
+
+  // TODO: allow user configured log level
+  if (config.verbose) {
+    NGBobaLogger.level = NGBobaLogger.LOG_LEVEL.VERBOSE;
   }
 
   var moduleFormat;
