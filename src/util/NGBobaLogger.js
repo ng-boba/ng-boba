@@ -33,7 +33,10 @@ var logger = {
     console.error('[' + code + ']', short);
     if (logger.level === LOG_VERBOSE) {
       if (!verbose) {
-        verbose = ['Welp, you\'re on your own.'];
+        verbose = [
+          'Please open an issue for more assistance:',
+          'https://github.com/ng-boba/ng-boba/issues?q=' + encodeURIComponent(code)
+        ];
       }
       console.error("*\n" + ' * ' + verbose.join("\n * ") + "\n*");
     }

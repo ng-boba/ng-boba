@@ -1,5 +1,6 @@
 var NGProject = require('../../src/data/NGProject');
 var MockFileObjects = require('./../mock/MockFileObjects');
+var NGBobaLogger  = require('../../src/util/NGBobaLogger');
 var _ = require('underscore');
 
 describe('NGProject', function () {
@@ -88,7 +89,7 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main');
-    }).toThrow('Missing module');
+    }).toThrow('[NGPT:MISM] Missing module');
   });
 
   it('ignores error if module dependency is missing & in ignore list', function () {
@@ -96,7 +97,7 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main', ['missingModule']);
-    }).not.toThrow('Missing module');
+    }).not.toThrow('[NGPT:MISM] Missing module');
   });
 
   it('throws error if module definition is missing', function () {
@@ -104,7 +105,7 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main');
-    }).toThrow('Missing module definition');
+    }).toThrow('[NGPT:MISD] Missing module definition');
   });
 
   it('throws error if module dependencies are missing', function () {
@@ -112,6 +113,6 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main');
-    }).toThrow('Missing module');
+    }).toThrow('[NGPT:MISM] Missing module');
   });
 });
