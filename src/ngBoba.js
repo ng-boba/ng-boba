@@ -51,14 +51,20 @@ function addBoba(config) {
   if (config.folder) {
     BobaParserTools.parseFolder(config.folder, moduleFormat).then(function(results) {
       handleParsedFiles(config, results, deferred);
-    });
-
+    }, function() {
+      deferred.reject('Error while parsing folder config');
+    }).done();
   } else {
 
     // use files
     BobaParserTools.parseFiles(config.files, moduleFormat).then(function(results) {
       handleParsedFiles(config, results, deferred);
-    });
+    }, function(e) {
+
+      // TODO: better way to emit errors
+      console.warn(e);
+      deferred.reject('Error while parsing file config');
+    }).done();
   }
   return deferred.promise;
 
@@ -96,7 +102,8 @@ function addBoba(config) {
       }
 
       // rethrow
-      throw e;
+      deferred.reject(e);
+      return;
     }
 
     var output = formatOutput(files);

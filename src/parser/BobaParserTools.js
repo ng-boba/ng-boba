@@ -35,7 +35,7 @@ function parseFile(filePath, moduleFormat) {
       deferred.resolve(fileObject);
     });
   }).catch(function () {
-    deferred.reject();
+    deferred.reject('No file');
   });
   return deferred.promise;
 }
@@ -49,7 +49,7 @@ function parseFiles(filePaths, moduleFormat) {
   var deferred = $q.defer();
   var fileObjects = [];
   var results = [];
-  filePaths.forEach(function (filePath) {
+  (filePaths || []).forEach(function (filePath) {
     var result = parseFile(filePath, moduleFormat).then(function (fileObject) {
       if (fileObject) {
         fileObjects.push(fileObject);
@@ -57,8 +57,10 @@ function parseFiles(filePaths, moduleFormat) {
     });
     results.push(result);
   });
-  $q.allSettled(results).finally(function () {
+  $q.all(results).then(function () {
     deferred.resolve(fileObjects);
+  }, function() {
+    deferred.reject('Bad file specified');
   });
   return deferred.promise;
 }
