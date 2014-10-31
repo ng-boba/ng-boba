@@ -21,6 +21,8 @@ function NGProject(name) {
   this.baseDependencies = [];
 }
 
+NGProject.SHIM_DELIMINATOR = '/';
+
 NGProject.prototype = {
 
   /**
@@ -66,9 +68,9 @@ NGProject.prototype = {
     var components = [];
     shimComponents.forEach(function(shimComponent) {
       var component;
-      var moduleSeparator = shimComponent.indexOf('.');
+      var moduleSeparator = shimComponent.indexOf(NGProject.SHIM_DELIMINATOR);
       if (moduleSeparator !== -1) {
-        var parts = shimComponent.split('.');
+        var parts = shimComponent.split(NGProject.SHIM_DELIMINATOR);
 
         // TODO: how to handle shim component types... is it necessary?
         component = new NGComponent(parts[0], NGComponentType.CONTROLLER, parts[1]);

@@ -20,11 +20,11 @@
   "shims": {
     "file/path.js": [
       "moduleName",
-      "moduleName.ControllerName",
-      "moduleName.directiveName"
+      "moduleName/ControllerName",
+      "moduleName/directiveName"
     ],
     "other/file.js": [
-      "moduleName.directiveName2"
+      "moduleName/directiveName2"
     ]
   },
 

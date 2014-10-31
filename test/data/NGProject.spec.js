@@ -37,11 +37,16 @@ describe('NGProject', function () {
   it('supports component shims', function () {
     p.addFileShims('some/file.js', [
       'main',
-      'main.controller',
-      'main.directive'
+      'main/controller',
+      'main/directive',
+      'ui.router',
+      'ui.router/foo'
     ]);
     var main = p.getModule('main');
     expect(Object.keys(main.components).length).toEqual(2);
+
+    var router = p.getModule('ui.router');
+    expect(Object.keys(router.components).length).toEqual(1);
 
     var files = p.getBundleFiles('main');
     expect(files.length).toEqual(1);
