@@ -2,6 +2,7 @@ var NGBobaLogger = require('./util/NGBobaLogger');
 var BobaParserTools = require('./parser/BobaParserTools');
 var NGProject = require('./data/NGProject');
 var $q = require('q');
+var fs = require('fs');
 
 module.exports = addBoba;
 
@@ -113,11 +114,13 @@ function addBoba(config) {
       var s = JSON.stringify(output);
       fs.writeFile(config.output, s, function (err) {
         if (err) {
+          NGBobaLogger.error('[NGBA:OUTP', 'Could not write output', [
+            'The provided output path was invalided: ' + config.output
+          ]);
+          deferred.reject();
           return;
         }
       });
-    } else {
-      console.log(output);
     }
     deferred.resolve(output);
   }
