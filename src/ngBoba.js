@@ -113,7 +113,7 @@ function addBoba(config) {
     }
 
     // write the file list to file
-    var s = JSON.stringify(output);
+    var s = config.verbose ? JSON.stringify(output, null, "\t") : JSON.stringify(output);
     fs.writeFile(config.output, s, function (err) {
       if (err) {
         NGBobaLogger.error('[NGBA:OUTP', 'Could not write output', [
