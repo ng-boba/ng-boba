@@ -108,21 +108,22 @@ function addBoba(config) {
     }
 
     var output = formatOutput(files);
-    if (config.output) {
-
-      // write the file list to file
-      var s = JSON.stringify(output);
-      fs.writeFile(config.output, s, function (err) {
-        if (err) {
-          NGBobaLogger.error('[NGBA:OUTP', 'Could not write output', [
-            'The provided output path was invalided: ' + config.output
-          ]);
-          deferred.reject();
-          return;
-        }
-      });
+    if (!config.output) {
+      deferred.resolve(output);
     }
-    deferred.resolve(output);
+
+    // write the file list to file
+    var s = JSON.stringify(output);
+    fs.writeFile(config.output, s, function (err) {
+      if (err) {
+        NGBobaLogger.error('[NGBA:OUTP', 'Could not write output', [
+          'The provided output path was invalid: ' + config.output
+        ]);
+        deferred.reject();
+        return;
+      }
+      deferred.resolve(output);
+    });
   }
 
   /**
