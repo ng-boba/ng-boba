@@ -14,8 +14,12 @@ function loadConfig(url, callback) {
   jsonfile.open("GET", url, true);
   jsonfile.onreadystatechange = function () {
     if (jsonfile.readyState == 4 && jsonfile.status == 200) {
-      var response = JSON.parse(jsonfile.responseText);
-      callback(response);
+      try {
+        var response = JSON.parse(jsonfile.responseText);
+        callback(response);
+      } catch (e) {
+        console.log('Invalid infuser config file');
+      }
     }
   };
   jsonfile.send(null);
