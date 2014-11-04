@@ -36,5 +36,7 @@
 
   "modules": [
     "jModule"
-  ]
+  ],
+
+  "verbose": true
 }

@@ -133,6 +133,8 @@ function addBoba(config) {
    */
   function formatOutput(files) {
     return {
+
+      // TODO: include version information
       generator: 'ng-boba',
       files: files
     };
