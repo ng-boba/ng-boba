@@ -2,6 +2,7 @@
  * Handles associating the angular components and modules
  * @type {NGProject}
  */
+var NGBobaLogger  = require('../util/NGBobaLogger');
 const NGComponentType = require('./NGComponentType');
 const NGComponent = require('./NGComponent');
 const NGModule = require('./NGModule');
@@ -19,6 +20,8 @@ function NGProject(name) {
   this.modules = {};
   this.baseDependencies = [];
 }
+
+NGProject.SHIM_DELIMINATOR = '/';
 
 NGProject.prototype = {
 
@@ -65,9 +68,9 @@ NGProject.prototype = {
     var components = [];
     shimComponents.forEach(function(shimComponent) {
       var component;
-      var moduleSeparator = shimComponent.indexOf('.');
+      var moduleSeparator = shimComponent.indexOf(NGProject.SHIM_DELIMINATOR);
       if (moduleSeparator !== -1) {
-        var parts = shimComponent.split('.');
+        var parts = shimComponent.split(NGProject.SHIM_DELIMINATOR);
 
         // TODO: how to handle shim component types... is it necessary?
         component = new NGComponent(parts[0], NGComponentType.CONTROLLER, parts[1]);
@@ -110,8 +113,7 @@ NGProject.prototype = {
   getBundleFiles: function (moduleName, ignoreMissingModules) {
     var rootModule = this.modules[moduleName];
     if (!rootModule) {
-      console.error('Missing module:', moduleName);
-      throw 'Missing module';
+      throwMissingModuleError('MISM', 'Missing module', rootModule);
     }
 
     // convert missing modules to hash for quick lookup
@@ -140,8 +142,7 @@ function traverseModule(project, ngModule, ignoreModules, files) {
       if (ignoreModules[depModuleName]) {
         continue;
       }
-      console.error('Missing module:', depModuleName);
-      throw 'Missing module';
+      throwMissingModuleError('MISM', 'Missing module', depModuleName);
     }
     traverseModule(project, depModule, ignoreModules, files);
   }
@@ -155,7 +156,20 @@ function traverseModule(project, ngModule, ignoreModules, files) {
     files.push(component.path);
   });
   if (!ngModule.path) {
-    console.error('Missing module definition:', ngModule.name);
-    throw 'Missing module definition';
+    throwMissingModuleError('MISD', 'Missing module definition', ngModule.name);
   }
+}
+
+function throwMissingModuleError(code, exception, moduleName) {
+  NGBobaLogger.throw(
+    'NGPT:' + code,
+    exception,
+    exception + ': ' + moduleName,
+    [
+      'Hey! You are missing a definition for the "' + moduleName + '" module.',
+      'To fix this error, you can do two things:',
+      ' 1. Find the module definition file and include it in your project file list.',
+      ' 2. Update your project config to ignore the "' + moduleName + '" module.'
+    ]
+  );
 }

@@ -1,12 +1,14 @@
 {
   "name": "ng-boba",
+  "description": "Angular Dependency Manager",
   "version": "0.0.1",
-  "main": "src/ngBoba.js",
-  "description": "TBD",
+  "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/ng-boba/ng-boba"
   },
+  "main": "src/ngBoba.js",
   "dependencies": {
     "minimist": "*",
     "q": "*",
@@ -20,7 +22,5 @@
     "karma-jasmine": "^0.1.5",
     "grunt": "^0.4.5",
     "jasmine-node": "^1.14.5"
-  },
-  "private": true,
-  "license": "MIT"
+  }
 }

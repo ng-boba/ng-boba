@@ -1,3 +1,4 @@
+const NGBobaLogger  = require('../util/NGBobaLogger');
 const NGComponent = require('./NGComponent');
 const NGComponentType = require('./NGComponentType');
 const _ = require('underscore');
@@ -19,7 +20,11 @@ _.extend(NGModule.prototype, NGComponent.prototype, {
   addComponent: function (component) {
     var name = component.name;
     if (this.components[name]) {
-      throw 'Component already registered with module! ' + name + ' ' + this.components[name] + ' ' + this.name + ' ';
+      NGBobaLogger.throw(
+        'NGME:REGI',
+        'Component already registered',
+        'Component already registered with module: ' + name + ', ' + this.components[name] + ', ' + this.name
+      );
     }
     this.components[name] = component;
   }

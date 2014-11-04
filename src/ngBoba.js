@@ -1,6 +1,8 @@
+var NGBobaLogger = require('./util/NGBobaLogger');
 var BobaParserTools = require('./parser/BobaParserTools');
 var NGProject = require('./data/NGProject');
 var $q = require('q');
+var fs = require('fs');
 
 module.exports = addBoba;
 
@@ -27,6 +29,11 @@ function addBoba(config) {
     // TODO: validate that the output file is empty
   }
 
+  // TODO: allow user configured log level
+  if (config.verbose) {
+    NGBobaLogger.level = NGBobaLogger.LOG_LEVEL.VERBOSE;
+  }
+
   var moduleFormat;
   switch (config.moduleFormat) {
     default:
@@ -45,14 +52,20 @@ function addBoba(config) {
   if (config.folder) {
     BobaParserTools.parseFolder(config.folder, moduleFormat).then(function(results) {
       handleParsedFiles(config, results, deferred);
-    });
-
+    }, function() {
+      deferred.reject('Error while parsing folder config');
+    }).done();
   } else {
 
     // use files
     BobaParserTools.parseFiles(config.files, moduleFormat).then(function(results) {
       handleParsedFiles(config, results, deferred);
-    });
+    }, function(e) {
+
+      // TODO: better way to emit errors
+      console.warn(e);
+      deferred.reject('Error while parsing file config');
+    }).done();
   }
   return deferred.promise;
 
@@ -90,23 +103,27 @@ function addBoba(config) {
       }
 
       // rethrow
-      throw e;
+      deferred.reject(e);
+      return;
     }
 
     var output = formatOutput(files);
-    if (config.output) {
-
-      // write the file list to file
-      var s = JSON.stringify(output);
-      fs.writeFile(config.output, s, function (err) {
-        if (err) {
-          return;
-        }
-      });
-    } else {
-      console.log(output);
+    if (!config.output) {
+      deferred.resolve(output);
     }
-    deferred.resolve(output);
+
+    // write the file list to file
+    var s = config.verbose ? JSON.stringify(output, null, "\t") : JSON.stringify(output);
+    fs.writeFile(config.output, s, function (err) {
+      if (err) {
+        NGBobaLogger.error('[NGBA:OUTP', 'Could not write output', [
+          'The provided output path was invalid: ' + config.output
+        ]);
+        deferred.reject();
+        return;
+      }
+      deferred.resolve(output);
+    });
   }
 
   /**

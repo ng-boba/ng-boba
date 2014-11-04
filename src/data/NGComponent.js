@@ -1,4 +1,5 @@
 var NGComponentType = require('./NGComponentType');
+var NGBobaLogger = require('../util/NGBobaLogger');
 var _ = require('underscore');
 
 module.exports = NGComponent;
@@ -15,14 +16,20 @@ module.exports = NGComponent;
 function NGComponent(moduleName, type, name, dependencies) {
   this.module = moduleName;
   if (!NGComponentType[type.toUpperCase()]) {
-    console.error('Invalid component type', type);
-    throw 'Invalid component type';
+    NGBobaLogger.throw(
+      'NGCT:TYPE',
+      'Invalid component type',
+      'Invalid component type: ' + type
+    );
   }
   this.type = type;
   this.name = name;
   if (dependencies && !_.isArray(dependencies)) {
-    console.error('Invalid component dependencies', dependencies);
-    throw 'Invalid component dependencies';
+    NGBobaLogger.throw(
+      'NGCT:DEPS',
+      'Invalid component dependencies',
+      'Invalid component dependencies: ' + JSON.stringify(dependencies)
+    );
   }
   this.dependencies = dependencies || [];
 }
@@ -36,8 +43,20 @@ NGComponent.prototype = {
 
   setFilePath: function (path) {
     if (this.path && this.path != path) {
-      console.error('Duplicate component path', this.path, path);
-      throw 'Duplicate component path';
+      NGBobaLogger.throw(
+        'NGCT:DUPE',
+        'Duplicate component definition',
+        'Duplicate definitions found for ' + this.type + ' "' + this.name + '"',
+        [
+          'Hey! You are defining ' + this.type + ' "'+this.name+'" multiple times in your project.',
+          '',
+          'Definition files:',
+          this.path,
+          path,
+          '',
+          'To fix this error, remove one of the duplicate definitions listed above.'
+        ]
+      );
     }
     this.path = path;
   }

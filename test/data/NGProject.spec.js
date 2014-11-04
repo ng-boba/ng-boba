@@ -1,5 +1,6 @@
 var NGProject = require('../../src/data/NGProject');
 var MockFileObjects = require('./../mock/MockFileObjects');
+var NGBobaLogger  = require('../../src/util/NGBobaLogger');
 var _ = require('underscore');
 
 describe('NGProject', function () {
@@ -36,11 +37,16 @@ describe('NGProject', function () {
   it('supports component shims', function () {
     p.addFileShims('some/file.js', [
       'main',
-      'main.controller',
-      'main.directive'
+      'main/controller',
+      'main/directive',
+      'ui.router',
+      'ui.router/foo'
     ]);
     var main = p.getModule('main');
     expect(Object.keys(main.components).length).toEqual(2);
+
+    var router = p.getModule('ui.router');
+    expect(Object.keys(router.components).length).toEqual(1);
 
     var files = p.getBundleFiles('main');
     expect(files.length).toEqual(1);
@@ -88,7 +94,7 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main');
-    }).toThrow('Missing module');
+    }).toThrow('[NGPT:MISM] Missing module');
   });
 
   it('ignores error if module dependency is missing & in ignore list', function () {
@@ -96,7 +102,7 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main', ['missingModule']);
-    }).not.toThrow('Missing module');
+    }).not.toThrow('[NGPT:MISM] Missing module');
   });
 
   it('throws error if module definition is missing', function () {
@@ -104,7 +110,7 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main');
-    }).toThrow('Missing module definition');
+    }).toThrow('[NGPT:MISD] Missing module definition');
   });
 
   it('throws error if module dependencies are missing', function () {
@@ -112,6 +118,6 @@ describe('NGProject', function () {
     applyDeps(p, deps);
     expect(function () {
       var files = p.getBundleFiles('main');
-    }).toThrow('Missing module');
+    }).toThrow('[NGPT:MISM] Missing module');
   });
 });
