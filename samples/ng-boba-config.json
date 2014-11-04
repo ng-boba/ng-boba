@@ -1,5 +1,6 @@
 {
-  "//1": "This is a sample configuration file",
+  "//1": "This is a sample configuration file.",
+  "//2": "It includes all the possible options for ngBoba.",
 
   "moduleFormat": "anonymous",
 
