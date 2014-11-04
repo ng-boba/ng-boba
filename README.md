@@ -8,7 +8,7 @@ ngBoba can be run from the command line directly or using our [grunt plugin](htt
 
 We recommend checking out our [ng-boba-sandbox](https://github.com/ng-boba/ng-boba-sandbox) project that has an example of how to use ngBoba with grunt.
 
-To use the library directly, we recommend creating a config file similar to [ng-boba.json](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-config.json) and run the project with:
+To use the library directly, create config file similar to [ng-boba.json](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-config.json) and run the project with:
 
 
 ```shell
