@@ -76,3 +76,14 @@ TODO: Example of shims option usage
 Type: `String[]`
 
 Names of modules to exclude in the dependency list.
+
+#### options.output
+Type: `String`
+
+Location to write the ngBoba dependency information. This can be used with the [ng-boba-infuser.js](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-infuser.js) to by pass a build process and begin using ngBoba quickly.
+
+#### options.verbose
+Type: `Boolean`
+
+When getting a project setup, verbose provides more helpful error messages to facilitate debugging your application's dependencies.
+
