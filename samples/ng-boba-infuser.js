@@ -25,7 +25,7 @@ function loadConfig(url, callback) {
   jsonfile.send(null);
 }
 
-function loadScript(url) {
+function loadScriptInline(url) {
   var xhrObj = new XMLHttpRequest();
   xhrObj.open('GET', url, false);
   xhrObj.send('');
@@ -39,6 +39,49 @@ function loadScript(url) {
   }
 }
 
+function loadScripts(scripts, index) {
+  index = index || 0;
+  if (index == 0) {
+    removeNgApp();
+  }
+  if (index >= scripts.length) {
+    applyNgApp();
+    return;
+  }
+  loadScript(scripts[index]).then(function() {
+    loadScripts(scripts, index+1);
+  });
+}
+
+function loadScript(url) {
+  var p = new Promise(function(resolve, reject) {
+    var el = document.createElement('script');
+    el.src = url;
+    el.onload = function() {
+      resolve();
+    };
+    document.getElementsByTagName('html')[0].appendChild(el);
+  });
+  return p;
+}
+
+var appEl;
+var appName;
+function removeNgApp() {
+  appEl = document.querySelector('[ng-app]');
+  if (appEl) {
+    appName = appEl.getAttribute('ng-app');
+    appEl.removeAttribute('ng-app');
+  }
+}
+
+function applyNgApp() {
+  if (appEl) {
+    appEl.setAttribute('ng-app', appName);
+  }
+}
+
+// infuser main
 var scripts = document.getElementsByTagName('script');
 scripts = Array.prototype.slice.call(scripts, 0);
 scripts.forEach(function (el) {
@@ -55,9 +98,7 @@ scripts.forEach(function (el) {
   var url = el.getAttribute('data-ng-boba');
   if (url) {
     loadConfig(url, function (config) {
-      config.files.forEach(function (file) {
-        loadScript(file);
-      });
+      loadScripts(config.files);
     });
   }
 });
