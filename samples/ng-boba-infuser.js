@@ -41,11 +41,7 @@ function loadScriptInline(url) {
 
 function loadScripts(scripts, index) {
   index = index || 0;
-  if (index == 0) {
-    removeNgApp();
-  }
   if (index >= scripts.length) {
-    applyNgApp();
     return;
   }
   loadScript(scripts[index]).then(function() {
@@ -63,22 +59,6 @@ function loadScript(url) {
     document.getElementsByTagName('html')[0].appendChild(el);
   });
   return p;
-}
-
-var appEl;
-var appName;
-function removeNgApp() {
-  appEl = document.querySelector('[ng-app]');
-  if (appEl) {
-    appName = appEl.getAttribute('ng-app');
-    appEl.removeAttribute('ng-app');
-  }
-}
-
-function applyNgApp() {
-  if (appEl) {
-    appEl.setAttribute('ng-app', appName);
-  }
 }
 
 // infuser main
