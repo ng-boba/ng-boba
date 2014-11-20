@@ -1,17 +1,21 @@
-# ng-boba
-
+ngBoba
+===================================
 > Angular Dependency Manager
 
-Angular provides powerful dependency management but it does nothing for shipping those dependencies. ngBoba aims to fill that void and leverage the existing project dependency information to create bundles!
-ngBoba generates a JSON output which can be consumed by your bundling tool of choice or fed directly into the ng-boba-infuser for fast prototyping.
+Angular provides powerful dependency management but it does nothing for shipping those dependencies.
+ngBoba aims to fill that void and leverage the existing project dependency information to create bundles!
+ngBoba generates a JSON output which can be consumed by your bundling tool of choice or fed directly
+into the ng-boba-infuser for fast prototyping.
 
 ## Getting Started
 
 ngBoba can be run from the command line directly or using our [grunt plugin](https://github.com/ng-boba/grunt-ng-boba).
 
-We recommend checking out the [ng-boba-sandbox](https://github.com/ng-boba/ng-boba-sandbox) project that has an example of how to use ngBoba with grunt.
+We recommend checking out the [ng-boba-seed](https://github.com/ng-boba/ng-boba-seed) project that has an example of how
+to use ngBoba with grunt.
 
-To use the library directly, clone the repo, create a config file (see [ng-boba-config.json](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-config.json)) and then run ngBoba.sh.
+To use the library directly, clone the repo, create a config file
+(see [ng-boba-config.json](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-config.json)) and then run ngBoba.sh.
 
 ```shell
 git clone https://github.com/ng-boba/ng-boba.git
@@ -21,7 +25,8 @@ cd ng-boba
 
 ### Next Steps
 
-Once you've generated a JSON file for your project, you can feed that into the [ng-boba-infuser](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-infuser.html). Include one script tag for the infuser and point it at your ngBoba JSON output.
+Once you've generated a JSON file for your project, you can feed that into the [ng-boba-infuser](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-infuser.html).
+Include one script tag for the infuser and point it at your ngBoba JSON output.
 
 ```html
 <script src="ng-boba-infuser.js" data-ng-boba="bin/ngBobaOutput.json" data-ng-boba-built=""></script>
@@ -94,7 +99,8 @@ Names of modules to exclude in the dependency list.
 ### options.output
 Type: `String`
 
-Location to write the ngBoba dependency information. This can be used with the [ng-boba-infuser.js](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-infuser.js) to by pass a build process and begin using ngBoba quickly.
+Location to write the ngBoba dependency information. This can be used with the [ng-boba-infuser.js](https://github.com/ng-boba/ng-boba/blob/master/samples/ng-boba-infuser.js)
+to by pass a build process and begin using ngBoba quickly.
 
 ### options.verbose
 Type: `Boolean`
