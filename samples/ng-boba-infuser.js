@@ -26,18 +26,12 @@
     jsonfile.send(null);
   }
 
-  function loadScriptInline(url) {
-    var xhrObj = new XMLHttpRequest();
-    xhrObj.open('GET', url, false);
-    xhrObj.send('');
-    if (xhrObj.status == 200 && xhrObj.responseText) {
-      var se = document.createElement('script');
-      se.type = "text/javascript";
-      se.text = xhrObj.responseText;
-      document.getElementsByTagName('head')[0].appendChild(se);
-    } else {
-      throw 'Failed to load script: ' + url;
-    }
+  // query param util
+  function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   }
 
   // we need to deactivate the angular app if it exists
@@ -84,10 +78,8 @@
   var scripts = document.getElementsByTagName('script');
   scripts = Array.prototype.slice.call(scripts, 0);
   scripts.forEach(function (el) {
-
-    // TODO: better way to trigger built files
-    var useBuilt = window.location.hash == '#built';
-    if (useBuilt) {
+    var bobaBuilt = getParameterByName('bobaBuilt') === 'true';
+    if (bobaBuilt) {
       var url = el.getAttribute('data-ng-boba-built');
       if (url) {
         loadScript(url);
