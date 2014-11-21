@@ -40,9 +40,27 @@
     }
   }
 
+  // we need to deactivate the angular app if it exists
+  // and manually bootstrap angular
+  var appEl;
+  var appName;
   function loadScripts(scripts, index) {
     index = index || 0;
+    if (index == 0) {
+      appEl = document.querySelector('[ng-app]');
+      if (appEl) {
+        appName = appEl.getAttribute('ng-app');
+        appEl.removeAttribute('ng-app');
+      }
+    }
     if (index >= scripts.length) {
+      if (appEl) {
+        appEl.setAttribute('ng-app', appName);
+        appEl.setAttribute('ng-strict-di', true);
+
+        // bootstrap the app
+        window.angular.bootstrap(appEl, [appName]);
+      }
       return;
     }
     loadScript(scripts[index]).then(function() {
