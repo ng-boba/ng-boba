@@ -135,7 +135,7 @@ function addBoba(config) {
     return {
 
       // TODO: include version information
-      generator: 'ng-boba',
+      generator: 'ngBoba',
       files: files
     };
   }
