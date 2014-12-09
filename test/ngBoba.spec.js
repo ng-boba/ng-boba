@@ -1,4 +1,5 @@
 var addBoba = require('../src/ngBoba');
+var fs = require('fs');
 
 describe('ngBoba', function () {
   'use strict';
@@ -6,7 +7,6 @@ describe('ngBoba', function () {
   beforeEach(function () {
 
   });
-
 
   it('throws config errors', function () {
     expect(function() {
@@ -49,6 +49,28 @@ describe('ngBoba', function () {
     runs(function() {
       expect(spy.callCount).toEqual(1);
       expect(spy.argsForCall[0][0]).toEqual('Error while parsing file config');
+    });
+  });
+
+  it('writes to file if config.output is specified', function() {
+    var spy = jasmine.createSpy();
+    var outputFile = './bin/outputTest.json';
+    runs(function() {
+      addBoba({
+        modules: ['foo'],
+        files: ['./test/mock/project/foo.js'],
+        output: outputFile
+      }).then(spy).catch(function() {
+        console.log('got error', arguments);
+      });
+    });
+
+    waitsFor(function() {
+      return spy.callCount == 1;
+    });
+
+    runs(function() {
+      expect(fs.existsSync(outputFile)).toBeTruthy();
     });
   });
 
