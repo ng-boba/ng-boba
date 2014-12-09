@@ -110,6 +110,7 @@ function addBoba(config) {
     var output = formatOutput(files);
     if (!config.output) {
       deferred.resolve(output);
+      return;
     }
 
     // write the file list to file
