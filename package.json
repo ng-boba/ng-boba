@@ -9,6 +9,9 @@
     "url": "https://github.com/ng-boba/ng-boba"
   },
   "main": "src/ngBoba.js",
+  "scripts": {
+    "test": "bin/runTests.sh"
+  },
   "dependencies": {
     "minimist": "*",
     "q": "*",

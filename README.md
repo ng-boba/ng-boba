@@ -107,3 +107,8 @@ Type: `Boolean`
 
 When getting a project setup, verbose provides more helpful error messages to facilitate debugging your application's dependencies.
 
+## Running Tests
+
+```shell
+npm test
+```
