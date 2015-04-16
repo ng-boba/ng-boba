@@ -23,6 +23,7 @@
     "karma": "*",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
+    "chai": "^2.2.0",
     "grunt": "^0.4.5",
     "jasmine-node": "^1.14.5"
   }
