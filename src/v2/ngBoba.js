@@ -1,0 +1,121 @@
+var NGBobaLogger = require('./util/NGBobaLogger');
+var NGCodeParser = require('./parser/NGCodeParser');
+var ParserTools = require('./parser/ParserTools');
+var $q = require('q');
+var fs = require('fs');
+
+module.exports = addBoba;
+
+function addBoba(config) {
+
+  if (!config) {
+    throw 'Boba needs a config to run.';
+  }
+
+  if (!config.folder && !config.files) {
+    throw 'Add files or folder option to your config';
+  }
+
+  if (config.folder && config.files) {
+    console.warn('Looks like you specified both files and folder options. Folder takes priority.');
+  }
+
+  if (!config.modules || config.modules.length == 0) {
+    throw 'Specify one or more angular modules.';
+  }
+
+  if (config.output) {
+
+    // TODO: validate that the output file is empty
+  }
+
+  // TODO: allow user configured log level
+  if (config.verbose) {
+    NGBobaLogger.level = NGBobaLogger.LOG_LEVEL.VERBOSE;
+  }
+
+  var promise;
+  if (config.folder) {
+    promise = ParserTools.parseFolder(config.folder, NGCodeParser.parseCode).then(function(parsed) {
+      console.log('parsed folder', parsed);
+
+    });
+  } else {
+
+    throw 'Not implemented';
+  }
+  return promise;
+
+
+  /**
+   * Assembles a NGProject from parsed details
+   * @param config
+   * @param {Array} parsedFiles
+   * @param {q.promise} deferred
+   */
+  function handleParsedFiles(config, parsedFiles, deferred) {
+    var project = new NGProject();
+    parsedFiles.forEach(function (fileObject) {
+      project.addFileComponents(fileObject.filePath, fileObject.results);
+    });
+
+    if (config.dependencies) {
+      config.dependencies.forEach(function (dependency) {
+        project.addBaseDependency(dependency);
+      });
+    }
+
+    if (config.shims) {
+      Object.keys(config.shims).forEach(function(filePath) {
+        var shimComponents = config.shims[filePath];
+        project.addFileShims(filePath, shimComponents);
+      });
+    }
+
+    var files;
+    try {
+      files = project.getBundleFiles(config.modules[0], config.ignoreModules);
+    } catch (e) {
+      if (config.verbose) {
+        console.log('Registered modules:', project.getModuleNames());
+      }
+
+      // rethrow
+      deferred.reject(e);
+      return;
+    }
+
+    var output = formatOutput(files);
+    if (!config.output) {
+      deferred.resolve(output);
+      return;
+    }
+
+    // write the file list to file
+    var s = config.verbose ? JSON.stringify(output, null, "\t") : JSON.stringify(output);
+    fs.writeFile(config.output, s, function (err) {
+      if (err) {
+        NGBobaLogger.error('[NGBA:OUTP', 'Could not write output', [
+          'The provided output path was invalid: ' + config.output
+        ]);
+        deferred.reject();
+        return;
+      }
+      deferred.resolve(output);
+    });
+  }
+
+  /**
+   * Creates the output envelope for the file list
+   * @param {Array} files
+   * @returns {Object}
+   */
+  function formatOutput(files) {
+    return {
+
+      // TODO: include version information
+      generator: 'ngBoba',
+      files: files
+    };
+  }
+}

@@ -3,15 +3,16 @@ var fs = require('fs');
 var $q = require('q');
 
 module.exports = {
-  parseFile: parseFile
+  readFile: readFile,
+  parseFolder: parseFolder
 };
 
 /**
- * Reads a file and passes the contents into a file
+ * Reads a file returns the contents
  * @param {String} filePath
  * @returns {q.promise} fileObject
  */
-function parseFile(filePath) {
+function readFile(filePath) {
   var deferred = $q.defer();
   var filePath = filePath;
   isFile(filePath).then(function () {
@@ -45,6 +46,48 @@ function isFile(filePath) {
     } else {
       deferred.resolve();
     }
+  });
+  return deferred.promise;
+}
+
+
+/**
+ * Parses all files in a directory and returns angular object information.
+ * @param {String} directoryPath
+ * @returns {q.promise} fileObjects[]
+ */
+function parseFolder(directoryPath, parser) {
+  var deferred = $q.defer();
+  var directoryPath = directoryPath.substr(-1) == '/' ? directoryPath : directoryPath + '/';
+  var parseResults = [];
+  fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+      deferred.reject(err);
+      return;
+    }
+    var results = [];
+    for (var i = 0, iM = files.length; i < iM; i++) {
+      var filePath = directoryPath + files[i];
+      var result = (function(filePath) {
+        return readFile(filePath).then(function(contents) {
+          if (parser) {
+            parseResults.push({
+              filePath: filePath,
+              results: parser(contents, filePath)
+            });
+          } else {
+            parseResults.push({
+              filePath: filePath,
+              contents: contents
+            });
+          }
+        });
+      })(filePath);
+      results.push(result);
+    }
+    $q.allSettled(results).finally(function () {
+      deferred.resolve(parseResults);
+    });
   });
   return deferred.promise;
 }

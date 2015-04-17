@@ -7,5 +7,5 @@ module.exports = {
 
 var TEST_DIR = 'test/cases/';
 function readTestCase(name) {
-  return ParserTools.parseFile(TEST_DIR + name + '.js');
+  return ParserTools.readFile(TEST_DIR + name + '.js');
 }
